@@ -3,6 +3,7 @@
 # ================================================================  #
 #                                                                   #
 #                    INTERNAL STUDY ONLY !                          #
+#                        VERSION 3.0                                #
 #                                                                   #
 # ================================================================  #
 
@@ -273,7 +274,7 @@ def appendCsv(file, row):
 #读出CSV文件
 def parseCsv(file):
     rows = []
-    with open(file, mode='r') as f:
+    with open(file, mode='r', encoding='utf-8-sig') as f:
         read=csv.reader(f)
         rows = [row for row in read]
         f.close
