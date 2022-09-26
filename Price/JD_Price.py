@@ -3,7 +3,7 @@
 # ================================================================  #
 #                                                                   #
 #                    INTERNAL STUDY ONLY !                          #
-#                        VERSION 5.0                                #
+#                        VERSION 5.1                                #
 #                                                                   #
 # ================================================================  #
 
@@ -25,10 +25,13 @@ from collections import Counter
 #cookie需要timely更新，否则影响抓取comment等等功能（页面刷新，控制台-网络-请求标头-cookie）
 COOKIE = "__jdu=1597106510361611076602; shshshfpa=e8c04075-2ed8-8c17-9a2e-5eb000215962-1597106511; pinId=lSwRbMKd-74tBDbKmwsL1w; shshshfpb=hYFEa8t4oszf5zty/aI7r1Q==; __jdv=76161171|direct|-|none|-|1661733370418; areaId=2; PCSYCityID=CN_310000_310100_0; shshshfp=594ba833ebdab9d6da8fd55a42246383; jsavif=0; __jda=122270672.1597106510361611076602.1597106510.1661733370.1661736699.64; __jdc=122270672; jsavif=0; ip_cityCode=2817; ipLoc-djd=2-2817-51973-0; wlfstk_smdl=uxj1ama95l44k3iy0vuzux861ko3ksre; TrackID=1wwh5dQPUO3-Jbsv7ZQp-mwhJOa6xjtAp-tnFZwG6FpF5hPQ-r3I9S4SXj2Ya_pHPmQx7PdSiEHoTQZZ5ZBbyqavSPq2KgqFGelWysuN0-PeE3W36-tVqiGuXke-tiibd; thor=C415B3C186C7F2E97A4AA78C1DB6835F123CCE19BAEDBD11C09CB538253C92B5800AB7FBD76057178E0BB5983DA0B64443D8A41C00B37F0CEEC32C59159E9418239FAA77892C866A27D21B442C00D79E51EDA0A9C646F1FB52ECFEAA2446880B43D5B2D714AB46B458FABB5C2E43EB120D0AC5C9B849FB847BC57310072DE35B25A5E005DACEA42980DE890E2DA670A1; pin=FioreZhang; unick=FioreZhang; ceshi3.com=201; _tp=IcTvqSKCNvN8JKtp2uhsOg==; _pst=FioreZhang; token=0d7dff58c81d855eab7f01712cca54d7,3,923187; __tk=sgPgdEvwrUrDJaAxstYxlonwJSYvqDbcsorRqEvwsUb1JcMEdrY1ebnprgnDqEbFdtPBIoBg,3,923187; __jdb=122270672.10.1597106510361611076602|64.1661736699; shshshsID=2258eb014a57d0c24fe40a8ae3255634_7_1661736877825; 3AB9D23F7A4B3C9B=IABYFHSAZ5YE4JK67BOOHWXZM3E3Q6LHRDFAOMFFBNIQYMWUZOXRA33UAIVOJD5FAGMHAXRKCCL2HARJ4LAJGRSQHE"
 
+COOKIE_COMMENT = "__jda=122270672.1663683708221126434788.1663683708.1663683708.1664085043.2; __jdv=76161171|direct|-|none|-|1663683708221; __jdu=1663683708221126434788; areaId=2; ipLoc-djd=2-2817-51973-0; PCSYCityID=CN_310000_310100_0; shshshfp=1277c908444970e9346886b6a0d87778; shshshfpa=fc04b9ea-88c1-f963-06a8-e5ae634f9147-1663683710; shshshfpb=gSzO2YzbyAsvPj3onltpH3A; mt_xid=V2_52007VwMVVV9fW1gZSBBfBmcDEVVYWldcFkApXgNhVkVTWl9OD0obEEAANAsXTlRbBlsDSxFdBTVTRVJdWgdeL0oYXwZ7AhpOXllDWRxCGlwOYwYiUG1YYlgdSh5VDW4BEVNtWlZbHQ%3D%3D; TrackID=1wBz3Qk1_AW6W3EFQ2F8brMhbuRzHnsutzDE5wefum8_GL0zabI0VckHXx9AunRKgeyIk8XVXtiKUdoGQ8AzU3k7j9KFaxFnWGDgtO_pXc5mD5OXLNDUr2ltl0ig_oplB; pinId=lSwRbMKd-74tBDbKmwsL1w; pin=FioreZhang; unick=FioreZhang; _tp=IcTvqSKCNvN8JKtp2uhsOg%3D%3D; _pst=FioreZhang; ip_cityCode=2817; jwotest_product=99; 3AB9D23F7A4B3C9B=OE3XPRB3JYCWMK7CFPGLBHPJQ4CHLPNFXEJD2EXR73ZVPKQDL5PICBKFMHBSAAQ3HX7DUOKBINZIKSAAYQ6V6P7EQI"
+
+COOKIE_PRICE =   "__jda=122270672.1663683708221126434788.1663683708.1664085043.1664157255.3; __jdv=76161171|direct|-|none|-|1663683708221; __jdu=1663683708221126434788; areaId=2; ipLoc-djd=2-2817-51973-0; PCSYCityID=CN_310000_310100_0; shshshfp=1277c908444970e9346886b6a0d87778; shshshfpa=fc04b9ea-88c1-f963-06a8-e5ae634f9147-1663683710; shshshfpb=gSzO2YzbyAsvPj3onltpH3A; mt_xid=V2_52007VwMVVV9fW1gZSBBfBmcDEVVYWldcFkApXgNhVkVTWl9OD0obEEAANAsXTlRbBlsDSxFdBTVTRVJdWgdeL0oYXwZ7AhpOXllDWRxCGlwOYwYiUG1YYlgdSh5VDW4BEVNtWlZbHQ%3D%3D; …0ig_oplB; pinId=lSwRbMKd-74tBDbKmwsL1w; pin=FioreZhang; unick=FioreZhang; _tp=IcTvqSKCNvN8JKtp2uhsOg%3D%3D; _pst=FioreZhang; __jdb=122270672.5.1663683708221126434788|3.1664157255; __jdc=122270672; shshshsID=88de82169a6ae95f9604bc3bd75f8296_4_1664157268975; jsavif=1; token=6d6521900b0737ffc9332ef89e58263c,2,924531; __tk=X3l3vSGDvsYoYSXEuSGDYckzupdRuSvTYDrSXcuyYUuFYzJ1YSJxuw,2,924531; ip_cityCode=2817; 3AB9D23F7A4B3C9B=OE3XPRB3JYCWMK7CFPGLBHPJQ4CHLPNFXEJD2EXR73ZVPKQDL5PICBKFMHBSAAQ3HX7DUOKBINZIKSAAYQ6V6P7EQI"
 
 # ======== MACROS ========
-TIMEOUT = 5
-RETRY = 5
+TIMEOUT = 10
+RETRY = 3
 NUMTAGS = 12
 FILE_CONFIG_DETAIL = "configDetail.csv"
 FILE_CONFIG_MASTER = "configMaster.csv"
@@ -63,7 +66,7 @@ def getListPageUp(keyword, page):
     #获取所有sku的sku number
     skulist = [sku.xpath('@data-sku')[0] for sku in skus]
     if len(skulist) == 0:
-        print("== Error getting new page(1st half), or No more item for this search", page)
+        print("    == Error getting new page(1st half), or No more item for this search", page)
 
     return skulist
 
@@ -92,7 +95,7 @@ def getListPageDown(keyword, page):
     #获取所有sku的sku number
     skulist = [sku.xpath('@data-sku')[0] for sku in skus]
     if len(skulist) == 0:
-        print("== Error getting new page(2nd half), or No more item for this search", page)
+        print("    == Error getting new page(2nd half), or No more item for this search", page)
  
     return skulist
 
@@ -125,7 +128,7 @@ def getList(keyword, countnum):
 #旧的接口，通过p.3.cn托管价格数据，2022年9月开始疑似废弃
 def getPrice(sku):
     head = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36', 
-            'Cookie': COOKIE}  
+            'Cookie': COOKIE_PRICE}  
     url = 'https://p.3.cn/prices/mgets?skuIds=J_'+str(sku)
     
     price = None
@@ -142,7 +145,7 @@ def getPrice(sku):
         else:
             break
         retry -= 1
-        print("== Retry getPrice(), can fix occational network lag")
+        print("    == Retry getPrice(), can fix occational network lag")
         time.sleep(2)
     #print(price)
     return price
@@ -154,6 +157,7 @@ def getPrice_2(sku):
             'Referer': 'https://item.jd.com'}  
     url = 'https://fts.jd.com/prices/mgets?callback=jQuery&skuIds=J_'+str(sku)+'&source=pc-item'
     
+    #print(url)
     price = None
     retry = RETRY
     while retry > 0:
@@ -168,7 +172,7 @@ def getPrice_2(sku):
         else:
             break
         retry -= 1
-        print("== Retry getPrice_2(), can fix occational network lag")
+        print("    == Retry getPrice_2(), can fix occational network lag")
         time.sleep(2)
     #print(price)
     return price    
@@ -185,7 +189,7 @@ def normalizeCountStr(countStr):
 # ======== CAPTURE COMMENTS ========    
 def getComment(sku):
     head = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36', 
-            'Cookie': COOKIE, 
+            'Cookie': COOKIE_COMMENT, 
             'Referer': 'https://item.jd.com'}  
     url = 'https://club.jd.com/comment/skuProductPageComments.action?&productId=' + str(sku) + '&score=0&sortType=5&page=0&pageSize=10&isShadowSku=0&fold=1'
     
@@ -213,7 +217,7 @@ def getComment(sku):
         except Exception as ex:
             pass            
         retry -= 1
-        print("== Retry getComment(), can fix occational network lag")
+        print("    == Retry getComment(), can fix occational network lag")
         time.sleep(2)
     
     #提取好评率，中评率，差评率
@@ -235,10 +239,11 @@ def getComment(sku):
     
 def getComment_2(sku):
     head = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36', 
-            'Cookie': COOKIE, 
+            'Cookie': COOKIE_COMMENT, 
             'Referer': 'https://item.jd.com'}  
     url = 'https://club.jd.com/comment/productCommentSummaries.action?referenceIds=' + str(sku) + '&categoryIds='
     
+    #print(url)
     #html = requests.get(url)
     #print(html.status_code)
     
@@ -260,7 +265,7 @@ def getComment_2(sku):
         except Exception as ex:
             pass            
         retry -= 1
-        print("== Retry getComment(), can fix occational network lag")
+        print("    == Retry getComment_2(), can fix occational network lag")
         time.sleep(2)
     
     #提取好评率，中评率，差评率
@@ -306,7 +311,7 @@ def getInfo(sku):
         if listskuname != [] and listinfo != []:
             break
         retry -= 1
-        print("== Retry getInfo(), can fix occational network lag")
+        print("    == Retry getInfo(), can fix occational network lag")
         time.sleep(1)
     
     #处理名字
@@ -445,10 +450,11 @@ def generateConfig(keyword):
     appendCsv(TEMPFILE_CONFIG_DETAIL, [""])
     
     #原子操作，备份之前的config文件，重命名当前临时文件为正式文件
-    if os.path.exists(FILE_CONFIG_DETAIL) and os.path.exists(TEMPFILE_CONFIG_DETAIL): 
+    if os.path.exists(TEMPFILE_CONFIG_DETAIL): 
         if os.path.exists(BACKFILE_CONFIG_DETAIL):
             os.remove(BACKFILE_CONFIG_DETAIL)
-        os.rename(FILE_CONFIG_DETAIL, BACKFILE_CONFIG_DETAIL)
+        if os.path.exists(FILE_CONFIG_DETAIL):
+            os.rename(FILE_CONFIG_DETAIL, BACKFILE_CONFIG_DETAIL)
         os.rename(TEMPFILE_CONFIG_DETAIL, FILE_CONFIG_DETAIL)
 
 def loadTable(fData, keyword): 
@@ -557,6 +563,7 @@ def generateTable(fData, keyword, count):
 
         #对每个sku，抓取价格和信息
         for sku in listskuThis:
+            print("")
             print("Getting Price and Information for Sku "+str(sku))
             price = getPrice_2(sku)
            
@@ -564,13 +571,14 @@ def generateTable(fData, keyword, count):
             summary = getComment_2(sku)
             
             if price == None or price == "" or skuname == None or skuname == "" or listinfo == None or len(listinfo) == 0 or summary[0] == 0:
-                time.sleep(3)
+                #time.sleep(3)
+                print("    == Miss information, drop current sku......")
                 continue    #信息不全，跳过这一条不写入
             
             #信息准备好后开始一次性写入一行
             row = [time.strftime("%Y", time.localtime()), time.strftime("%m", time.localtime()), time.strftime("%d", time.localtime()), time.strftime("%A", time.localtime()), time.strftime("%H:%M", time.localtime()), SPECIAL_ID_HEAD+str(sku), 'https://item.jd.com/'+str(sku)+'.html', skuname, price, shop, brand, SPECIAL_SPLIT]
-            listinfoindex = [x.split("：")[0] for x in listinfo]
-            listinfodata = [x.split("：")[1] for x in listinfo]
+            listinfoindex = [x.split("：")[0] for x in listinfo if '：' in x]
+            listinfodata = [x.split("：")[1] for x in listinfo if '：' in x]
             for index in listIndex:
                 if index in listinfoindex:
                     row.append(listinfodata[listinfoindex.index(index)])
@@ -629,4 +637,5 @@ if __name__ == "__main__":
         #生成表格
         generateTable(fData, KEYWORD, COUNT)
 
+    print("")
     print("Finished. ")
