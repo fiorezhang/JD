@@ -3,7 +3,7 @@
 # ================================================================  #
 #                                                                   #
 #                    INTERNAL STUDY ONLY !                          #
-#                        VERSION 5.1                                #
+#                        VERSION 5.2                                #
 #                                                                   #
 # ================================================================  #
 
@@ -22,12 +22,10 @@ import sys
 from collections import Counter
 
 # ======== COOKIE FOR WEB REQUEST ========
-#cookie需要timely更新，否则影响抓取comment等等功能（页面刷新，控制台-网络-请求标头-cookie）
-COOKIE = "__jdu=1597106510361611076602; shshshfpa=e8c04075-2ed8-8c17-9a2e-5eb000215962-1597106511; pinId=lSwRbMKd-74tBDbKmwsL1w; shshshfpb=hYFEa8t4oszf5zty/aI7r1Q==; __jdv=76161171|direct|-|none|-|1661733370418; areaId=2; PCSYCityID=CN_310000_310100_0; shshshfp=594ba833ebdab9d6da8fd55a42246383; jsavif=0; __jda=122270672.1597106510361611076602.1597106510.1661733370.1661736699.64; __jdc=122270672; jsavif=0; ip_cityCode=2817; ipLoc-djd=2-2817-51973-0; wlfstk_smdl=uxj1ama95l44k3iy0vuzux861ko3ksre; TrackID=1wwh5dQPUO3-Jbsv7ZQp-mwhJOa6xjtAp-tnFZwG6FpF5hPQ-r3I9S4SXj2Ya_pHPmQx7PdSiEHoTQZZ5ZBbyqavSPq2KgqFGelWysuN0-PeE3W36-tVqiGuXke-tiibd; thor=C415B3C186C7F2E97A4AA78C1DB6835F123CCE19BAEDBD11C09CB538253C92B5800AB7FBD76057178E0BB5983DA0B64443D8A41C00B37F0CEEC32C59159E9418239FAA77892C866A27D21B442C00D79E51EDA0A9C646F1FB52ECFEAA2446880B43D5B2D714AB46B458FABB5C2E43EB120D0AC5C9B849FB847BC57310072DE35B25A5E005DACEA42980DE890E2DA670A1; pin=FioreZhang; unick=FioreZhang; ceshi3.com=201; _tp=IcTvqSKCNvN8JKtp2uhsOg==; _pst=FioreZhang; token=0d7dff58c81d855eab7f01712cca54d7,3,923187; __tk=sgPgdEvwrUrDJaAxstYxlonwJSYvqDbcsorRqEvwsUb1JcMEdrY1ebnprgnDqEbFdtPBIoBg,3,923187; __jdb=122270672.10.1597106510361611076602|64.1661736699; shshshsID=2258eb014a57d0c24fe40a8ae3255634_7_1661736877825; 3AB9D23F7A4B3C9B=IABYFHSAZ5YE4JK67BOOHWXZM3E3Q6LHRDFAOMFFBNIQYMWUZOXRA33UAIVOJD5FAGMHAXRKCCL2HARJ4LAJGRSQHE"
+#cookie需要timely更新，否则影响抓取comment等等功能（页面刷新，控制台-网络-搜索'club'-请求标头-cookie）
+COOKIE = "__jdu=1597106510361611076602; shshshfpa=e8c04075-2ed8-8c17-9a2e-5eb000215962-1597106511; pinId=lSwRbMKd-74tBDbKmwsL1w; shshshfpb=hYFEa8t4oszf5zty/aI7r1Q==; pin=FioreZhang; unick=FioreZhang; _tp=IcTvqSKCNvN8JKtp2uhsOg==; _pst=FioreZhang; __jdv=76161171|direct|-|none|-|1663890586973; PCSYCityID=CN_310000_310100_0; areaId=2; user-key=af8a322e-ee27-4494-b626-23ba0a85acdd; ipLoc-djd=2-2817-51973-0; jwotest_product=99; mt_xid=V2_52007VwMWWltYU10bSRheAmcEElJcXlVdHkopVVAzBhoBWgpOXEtLEEAAN1BHTlVZAAkDT0xcBWEFRwdaWVENL0oYXwZ7AhpOXl9DWxdCHFUOZgUiUG1YYlMaThtfDGQKE1RZW1NeG0EYXQRXAxRWWQ==; TrackID=1twzg7m2a4vRWJCEUNzWXj7lsOvqUZag4zAMZ1hXBPq0VU54dS3UQpKZ5FDVaFY-rJnT0IDj2X58DYmVMSLkWDEhSc_4JkxSVFimOOpS67vjv_FSraUK-Y4rt30Ft0x3d; __jda=122270672.1597106510361611076602.1597106510.1664238082.1664248153.74; __jdc=122270672; jsavif=0; shshshfp=af9f3e08f6ccbec5fc91696b89f7edf5; token=3d158867aebae13042c5ffb6c83848da,2,924582; __tk=VDmITnTHinmIVLbHiUVHTUmITLTJVLlBTIY5VDZLSLY,2,924582; ip_cityCode=2817; 3AB9D23F7A4B3C9B=IABYFHSAZ5YE4JK67BOOHWXZM3E3Q6LHRDFAOMFFBNIQYMWUZOXRA33UAIVOJD5FAGMHAXRKCCL2HARJ4LAJGRSQHE; JSESSIONID=F188B3A4B2E3D899925B5D1751B0BC61.s1; __jdb=122270672.6.1597106510361611076602|74.1664248153; shshshsID=9e21834d6000c0f7ff44b71800ee0379_5_1664248333666"
 
-COOKIE_COMMENT = "__jda=122270672.1663683708221126434788.1663683708.1663683708.1664085043.2; __jdv=76161171|direct|-|none|-|1663683708221; __jdu=1663683708221126434788; areaId=2; ipLoc-djd=2-2817-51973-0; PCSYCityID=CN_310000_310100_0; shshshfp=1277c908444970e9346886b6a0d87778; shshshfpa=fc04b9ea-88c1-f963-06a8-e5ae634f9147-1663683710; shshshfpb=gSzO2YzbyAsvPj3onltpH3A; mt_xid=V2_52007VwMVVV9fW1gZSBBfBmcDEVVYWldcFkApXgNhVkVTWl9OD0obEEAANAsXTlRbBlsDSxFdBTVTRVJdWgdeL0oYXwZ7AhpOXllDWRxCGlwOYwYiUG1YYlgdSh5VDW4BEVNtWlZbHQ%3D%3D; TrackID=1wBz3Qk1_AW6W3EFQ2F8brMhbuRzHnsutzDE5wefum8_GL0zabI0VckHXx9AunRKgeyIk8XVXtiKUdoGQ8AzU3k7j9KFaxFnWGDgtO_pXc5mD5OXLNDUr2ltl0ig_oplB; pinId=lSwRbMKd-74tBDbKmwsL1w; pin=FioreZhang; unick=FioreZhang; _tp=IcTvqSKCNvN8JKtp2uhsOg%3D%3D; _pst=FioreZhang; ip_cityCode=2817; jwotest_product=99; 3AB9D23F7A4B3C9B=OE3XPRB3JYCWMK7CFPGLBHPJQ4CHLPNFXEJD2EXR73ZVPKQDL5PICBKFMHBSAAQ3HX7DUOKBINZIKSAAYQ6V6P7EQI"
-
-COOKIE_PRICE =   "__jda=122270672.1663683708221126434788.1663683708.1664085043.1664157255.3; __jdv=76161171|direct|-|none|-|1663683708221; __jdu=1663683708221126434788; areaId=2; ipLoc-djd=2-2817-51973-0; PCSYCityID=CN_310000_310100_0; shshshfp=1277c908444970e9346886b6a0d87778; shshshfpa=fc04b9ea-88c1-f963-06a8-e5ae634f9147-1663683710; shshshfpb=gSzO2YzbyAsvPj3onltpH3A; mt_xid=V2_52007VwMVVV9fW1gZSBBfBmcDEVVYWldcFkApXgNhVkVTWl9OD0obEEAANAsXTlRbBlsDSxFdBTVTRVJdWgdeL0oYXwZ7AhpOXllDWRxCGlwOYwYiUG1YYlgdSh5VDW4BEVNtWlZbHQ%3D%3D; …0ig_oplB; pinId=lSwRbMKd-74tBDbKmwsL1w; pin=FioreZhang; unick=FioreZhang; _tp=IcTvqSKCNvN8JKtp2uhsOg%3D%3D; _pst=FioreZhang; __jdb=122270672.5.1663683708221126434788|3.1664157255; __jdc=122270672; shshshsID=88de82169a6ae95f9604bc3bd75f8296_4_1664157268975; jsavif=1; token=6d6521900b0737ffc9332ef89e58263c,2,924531; __tk=X3l3vSGDvsYoYSXEuSGDYckzupdRuSvTYDrSXcuyYUuFYzJ1YSJxuw,2,924531; ip_cityCode=2817; 3AB9D23F7A4B3C9B=OE3XPRB3JYCWMK7CFPGLBHPJQ4CHLPNFXEJD2EXR73ZVPKQDL5PICBKFMHBSAAQ3HX7DUOKBINZIKSAAYQ6V6P7EQI"
+USERAGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0"
 
 # ======== MACROS ========
 TIMEOUT = 10
@@ -39,7 +37,7 @@ SPECIAL_SPLIT = "█"
 SPECIAL_ID_HEAD = "_"
 
 #表头
-# "年", "月", "日", "星期", "时间", "ID", "LINK", "商品全名", "价格", "店铺", "品牌", SPECIAL_SPLIT, =INDEX=, SPECIAL_SPLIT, =DETAIL=, SPECIAL_SPLIT, "好评率", "中评率", "差评率", "好评数", "中评数", "差评数"
+# "年", "月", "日", "星期", "时间", "ID", "LINK", "销量指数", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌", SPECIAL_SPLIT, =INDEX=, SPECIAL_SPLIT, =DETAIL=, SPECIAL_SPLIT, "好评率", "中评率", "差评率", "好评数", "中评数", "差评数"
 
 
 # ======== CAPTURE LIST OF SKU ========
@@ -50,10 +48,10 @@ def getListPageUp(keyword, page):
     head = {'authority': 'search.jd.com',
             'method': 'GET',
             'scheme': 'https',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0',
+            'User-Agent': USERAGENT,
             }
     #对上半页，构造请求的页面
-    url = 'https://search.jd.com/Search?keyword='+str(keyword)+'&enc=utf-8&page='+str(2*page-1)
+    url = 'https://search.jd.com/Search?keyword='+str(keyword)+'&enc=utf-8&page='+str(2*page-1)+'&psort=3'
 
     #获得页面HTML
     response = requests.get(url, headers=head)
@@ -77,12 +75,12 @@ def getListPageDown(keyword, page):
             'method': 'GET',
             'scheme':'https',
             'referer': 'https://search.jd.com/Search?keyword=PC&enc=utf-8',
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36',
+            'User-Agent': USERAGENT,
             'x-requested-with': 'XMLHttpRequest',
     }
     #对下半页，构造请求的页面
     timestp = '%.5f'%time.time() #获取当前的Unix时间戳，并且保留小数点后5位
-    url = 'https://search.jd.com/s_new.php?keyword='+str(keyword)+'&enc=utf-8&page='+str(2*page)+'&s='+str(48*page-20)+'&scrolling=y&log_id='+str(timestp)
+    url = 'https://search.jd.com/s_new.php?keyword='+str(keyword)+'&enc=utf-8&page='+str(2*page)+'&psort=3&s='+str(48*page-20)+'&scrolling=y&log_id='+str(timestp)
 
     #获得页面HTML
     response = requests.get(url, headers=head)
@@ -103,6 +101,7 @@ def getListPageDown(keyword, page):
 def getList(keyword, countnum):
     MAXPAGE = 20
     skulist = []
+    skupagelist = []
     for page in range(1, MAXPAGE):
         print("Getting sku list for Page "+str(page))
         #获得每页上半页，如果没有新的sku就跳出循环
@@ -110,25 +109,29 @@ def getList(keyword, countnum):
         if len(skulistUpdate) == 0:
             break
         skulist += skulistUpdate
+        skupagelist.append(skulistUpdate)
         #获得每页下半页，如果没有新的sku就跳出循环
         skulistUpdate = getListPageDown(keyword, page)
         if len(skulistUpdate) == 0:
             break
         skulist += skulistUpdate
+        skupagelist.append(skulistUpdate)
         #去重
-        skulist = list(set(skulist)) 
+        skulistold = skulist
+        skulist = sorted(list(set(skulist)), key = skulistold.index)
         #如果超过希望抓取的sku数量就跳出循环
         if len(skulist) >= countnum:
             break
         time.sleep(3)   #慢一点……
     
-    return [str(x) for x in skulist]
+    return skulist, skupagelist
 
 # ======== CAPTURE PRICE ========
 #旧的接口，通过p.3.cn托管价格数据，2022年9月开始疑似废弃
+'''
 def getPrice(sku):
-    head = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36', 
-            'Cookie': COOKIE_PRICE}  
+    head = {'User-Agent': USERAGENT, 
+            'Cookie': COOKIE}  
     url = 'https://p.3.cn/prices/mgets?skuIds=J_'+str(sku)
     
     price = None
@@ -149,24 +152,31 @@ def getPrice(sku):
         time.sleep(2)
     #print(price)
     return price
+'''
     
 #新的接口，通过fts.jd.com查询价格信息
 def getPrice_2(sku):
-    head = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36', 
+    head = {'User-Agent': USERAGENT, 
             'Cookie': COOKIE, 
             'Referer': 'https://item.jd.com'}  
     url = 'https://fts.jd.com/prices/mgets?callback=jQuery&skuIds=J_'+str(sku)+'&source=pc-item'
     
     #print(url)
-    price = None
+    price_m = None
+    price_op = None
+    price_p = None
     retry = RETRY
     while retry > 0:
         try:
             request = urllib.request.Request(url, headers=head)
             response = urllib.request.urlopen(request, timeout=TIMEOUT)
             content = response.read().decode()
+            pattern = re.compile('"m":"(.*?)"')
+            price_m = re.search(pattern, content).group(1)
+            pattern = re.compile('"op":"(.*?)"')
+            price_op = re.search(pattern, content).group(1) 
             pattern = re.compile('"p":"(.*?)"')
-            price = re.search(pattern, content).group(1)
+            price_p = re.search(pattern, content).group(1)            
         except:
             pass
         else:
@@ -175,7 +185,7 @@ def getPrice_2(sku):
         print("    == Retry getPrice_2(), can fix occational network lag")
         time.sleep(2)
     #print(price)
-    return price    
+    return price_m, price_op, price_p    
 
 def normalizeCountStr(countStr):
     countStr_1 = countStr.rstrip('+')
@@ -187,9 +197,10 @@ def normalizeCountStr(countStr):
     return count
 
 # ======== CAPTURE COMMENTS ========    
+'''
 def getComment(sku):
-    head = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36', 
-            'Cookie': COOKIE_COMMENT, 
+    head = {'User-Agent': USERAGENT, 
+            'Cookie': COOKIE, 
             'Referer': 'https://item.jd.com'}  
     url = 'https://club.jd.com/comment/skuProductPageComments.action?&productId=' + str(sku) + '&score=0&sortType=5&page=0&pageSize=10&isShadowSku=0&fold=1'
     
@@ -236,10 +247,11 @@ def getComment(sku):
             commentTags.append("")
     #print(commentTags)    
     return commentSummary, commentTags
+'''
     
 def getComment_2(sku):
-    head = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36', 
-            'Cookie': COOKIE_COMMENT, 
+    head = {'User-Agent': USERAGENT, 
+            'Cookie': COOKIE, 
             'Referer': 'https://item.jd.com'}  
     url = 'https://club.jd.com/comment/productCommentSummaries.action?referenceIds=' + str(sku) + '&categoryIds='
     
@@ -280,12 +292,13 @@ def getComment_2(sku):
     
 # ======== CAPTURE OTHER INFO ========
 def getInfo(sku):
-    head = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36', 
+    head = {'User-Agent': USERAGENT, 
             'Cookie': COOKIE}  
     url = 'https://item.jd.com/'+str(sku)+'.html'
 
     listskuname = []
     listshop = []
+    listgoodshop = []
     listbrand = []
     listinfo = []
     listtableindex = []
@@ -299,6 +312,7 @@ def getInfo(sku):
 
             listskuname = htmltree.xpath('//div[@class="sku-name"]/text()')
             listshop = htmltree.xpath('//div[@class="J-hove-wrap EDropdown fr"]/div/div/a/text()')
+            listgoodshop = htmltree.xpath('//div[@class="name goodshop EDropdown"]/em/text()')
             listbrand = htmltree.xpath('//ul[@id="parameter-brand"]/li/@title')
             listinfo = htmltree.xpath('//ul[@class="parameter2 p-parameter-list"]/li/text()')
             listtableindex = htmltree.xpath('//div[@class="Ptable"]/div/dl/dl/dt/text()')
@@ -321,6 +335,10 @@ def getInfo(sku):
         shop = listshop[0]
     else:
         shop = ''
+    if listgoodshop !=[] and listgoodshop != None and "自营" in listgoodshop[0]:
+        goodshop = 'Yes'
+    else: 
+        goodshop = 'No'
     #处理品牌信息    
     if listbrand != [] and listbrand != None:
         brand = listbrand[0]
@@ -329,11 +347,12 @@ def getInfo(sku):
     
     #print(skuname)
     #print(shop)
+    #print(goodshop)
     #print(brand)
     #print(listinfo)
     #print(listtableindex)
     #print(listtabledata)
-    return skuname, shop, brand, listinfo, listtableindex, listtabledata
+    return skuname, shop, goodshop, brand, listinfo, listtableindex, listtabledata
 
 # ======== MISC ========
 #剥离skuname并去除无用字符
@@ -349,6 +368,14 @@ def getSkuname(listSkuname):
     #print(skuname)
     
     return skuname
+
+def getHalfPage(sku, skupagelist):
+    page = ""
+    for skupagenum, skupage in enumerate(skupagelist):
+        if sku in skupage:
+            break
+    page = str(skupagenum + 1)
+    return page
 
 #写入CSV文件
 def appendCsv(file, row):
@@ -395,6 +422,8 @@ def generateConfig(keyword):
     TEMPFILE_CONFIG_DETAIL = "_configDetail.csv"
     BACKFILE_CONFIG_DETAIL = "_configDetail.backup.csv"
     
+    print("Generating config file. It takes minute...")
+    
     #检查是否已经存在针对当前搜索词的config字段，有的话提取已有的设置
     listIndex, listDetail, listAdditional = getConfig(keyword)
 
@@ -408,13 +437,13 @@ def generateConfig(keyword):
                     appendCsv(TEMPFILE_CONFIG_DETAIL, [""])
 
     #抓取首页list
-    listsku = getList(keyword, 50)
+    listsku, _ = getList(keyword, 50)
     listinfoindexpool = []
     listtableindexpool = []
     
     #对首页list，获取每个sku的商品介绍目录和详细信息目录
     for sku in listsku:
-        skuname, shop, brand, listinfo, listtableindex, listtabledata = getInfo(sku)
+        skuname, shop, goodshop, brand, listinfo, listtableindex, listtabledata = getInfo(sku)
         listinfoindex = [x.split("：")[0] for x in listinfo]
         listinfodata = [x.split("：")[1] for x in listinfo]
         listinfoindexpool.extend(listinfoindex)
@@ -474,7 +503,7 @@ def loadTable(fData, keyword):
                 skuDetail = []
                 #第一组普通信息
                 rowConfigPart = rowConfig[: listSpecialSplit[0]]    
-                for index in ["年", "月", "日", "星期", "时间", "ID", "LINK", "商品全名", "价格", "店铺", "品牌"]: 
+                for index in ["年", "月", "日", "星期", "时间", "ID", "LINK", "销量指数", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌"]: 
                     if index in rowConfigPart:    
                         skuDetail.append(row[rowConfigPart.index(index)])
                     else:
@@ -516,9 +545,12 @@ def generateTable(fData, keyword, count):
     #读取config文件
     listIndex, listDetail, listAdditional = getConfig(keyword)
     
+    #删除旧的临时文件
+    if os.path.exists(TEMPFILE_DATA):
+        os.remove(TEMPFILE_DATA)
 
     #生成临时数据文件的表头
-    row = ["年", "月", "日", "星期", "时间", "ID", "LINK", "商品全名", "价格", "店铺", "品牌", SPECIAL_SPLIT]
+    row = ["年", "月", "日", "星期", "时间", "ID", "LINK", "销量指数", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌", SPECIAL_SPLIT]
     for index in listIndex:
         row.append(index)
     row.append(SPECIAL_SPLIT)   
@@ -550,33 +582,34 @@ def generateTable(fData, keyword, count):
     #如果没有达到需要的数量，继续抓数据
     if len(listSkuOld) < count or len(listAdditional) > 0:
         #抓取所有sku的货号
-        listsku = getList(keyword, count)
+        listsku, skupagelist = getList(keyword, count)
         print("Available records: ", len(listsku))
         #print(listsku)
         #加入手动添加的sku货号
         listsku += listAdditional
-        listsku = set(listsku)
-        print("Available records + additional: ", len(listsku))
+        listskuAdd = sorted(set(listsku), key = listsku.index)
+        print("Available records + additional: ", len(listskuAdd))
         #实际要抓取的sku货号
-        listskuThis = list(set(listsku) - set(listSkuOld))
+        listskuThis = sorted(list(set(listskuAdd) - set(listSkuOld)), key = listskuAdd.index)
         print("Excuting records: ", len(listskuThis))
 
         #对每个sku，抓取价格和信息
         for sku in listskuThis:
             print("")
             print("Getting Price and Information for Sku "+str(sku))
-            price = getPrice_2(sku)
-           
-            skuname, shop, brand, listinfo, listtableindex, listtabledata = getInfo(sku)
+            price_m, price_op, price_p = getPrice_2(sku)
+            halfpage = getHalfPage(sku, skupagelist)
+            skuname, shop, goodshop, brand, listinfo, listtableindex, listtabledata = getInfo(sku)
             summary = getComment_2(sku)
             
-            if price == None or price == "" or skuname == None or skuname == "" or listinfo == None or len(listinfo) == 0 or summary[0] == 0:
+            if price_p == None or price_p == "" or skuname == None or skuname == "" or listinfo == None or len(listinfo) == 0 or summary[0] == 0:
                 #time.sleep(3)
                 print("    == Miss information, drop current sku......")
                 continue    #信息不全，跳过这一条不写入
             
             #信息准备好后开始一次性写入一行
-            row = [time.strftime("%Y", time.localtime()), time.strftime("%m", time.localtime()), time.strftime("%d", time.localtime()), time.strftime("%A", time.localtime()), time.strftime("%H:%M", time.localtime()), SPECIAL_ID_HEAD+str(sku), 'https://item.jd.com/'+str(sku)+'.html', skuname, price, shop, brand, SPECIAL_SPLIT]
+            row = [time.strftime("%Y", time.localtime()), time.strftime("%m", time.localtime()), time.strftime("%d", time.localtime()), time.strftime("%A", time.localtime()), time.strftime("%H:%M", time.localtime()), SPECIAL_ID_HEAD+str(sku), 'https://item.jd.com/'+str(sku)+'.html']
+            row.extend([halfpage, skuname, price_m, price_op, price_p, shop, goodshop, brand, SPECIAL_SPLIT])
             listinfoindex = [x.split("：")[0] for x in listinfo if '：' in x]
             listinfodata = [x.split("：")[1] for x in listinfo if '：' in x]
             for index in listIndex:
