@@ -3,7 +3,7 @@
 # ================================================================  #
 #                                                                   #
 #                    INTERNAL STUDY ONLY !                          #
-#                        VERSION 6.0                                #
+#                        VERSION 6.2                                #
 #                                                                   #
 # ================================================================  #
 
@@ -24,27 +24,30 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud, STOPWORDS
 import jieba
 import imageio
+import cv2
+from PIL import ImageFont, ImageDraw, Image
 
 # ======== COOKIE FOR WEB REQUEST ========
-#cookie需要timely更新，否则影响抓取comment等等功能（页面刷新，控制台-网络-搜索'club'-请求标头-cookie）
-COOKIE = "__jdu=1597106510361611076602; shshshfpa=e8c04075-2ed8-8c17-9a2e-5eb000215962-1597106511; pinId=lSwRbMKd-74tBDbKmwsL1w; shshshfpb=hYFEa8t4oszf5zty/aI7r1Q==; pin=FioreZhang; unick=FioreZhang; _tp=IcTvqSKCNvN8JKtp2uhsOg==; _pst=FioreZhang; user-key=af8a322e-ee27-4494-b626-23ba0a85acdd; mt_xid=V2_52007VwMWWltYU10bSRheAmcEElJcXlVdHkopVVAzBhoBWgpOXEtLEEAAN1BHTlVZAAkDT0xcBWEFRwdaWVENL0oYXwZ7AhpOXl9DWxdCHFUOZgUiUG1YYlMaThtfDGQKE1RZW1NeG0EYXQRXAxRWWQ==; __jdv=76161171|direct|-|none|-|1665214405491; PCSYCityID=CN_310000_310100_0; areaId=2; ipLoc-djd=2-2817-51973-0; jwotest_product=99; __jdc=122270672; shshshfp=4fb4889ad884f65329321193d8b66aa0; ip_cityCode=2817; __jda=122270672.1597106510361611076602.1597106510.1665370311.1665373051.80; jsavif=0; wlfstk_smdl=5af86i81b7ojtkf4l9yayoqwa9y80dw6; TrackID=1F_rq7qW1-eSGaRNoHj_HBimVDxaTTboY-qSGMYy5_ge4JkrcneHFziYc7Ap80svM9YeE5wnOcM5F3G6Hn28ucCoJZL0eSbkTRXaeZK2ctqYgfK0wd6yBkmhqoHlC1ER5; thor=C415B3C186C7F2E97A4AA78C1DB6835F9D3C6E2A4A57D014DBACDAB5467F9537589F7BBD150B32D205BCA917588C9ED89F3D52ADC33408B50402B749A609C313CFB4EB1EDB2C28EA5D9D4D2FA032C1C41860B37274C8E109703EA233F12AE67A8D2DC00BDADFE6DB64C69F7EA44AEE1592B4CAF579583F233DC48E257219FCE4188DB0349887CBF50E257E6CD680C5B3; ceshi3.com=201; token=bc616fb032a72b85b24c3e43f8353792,3,925208; __tk=kC3HB05VqjkmkmzaSkkzBc5FAjB3kl9akDKzZkfSnZklZm3Fk1OOZkfujxPHTcR4SjBwZD5g,3,925208; 3AB9D23F7A4B3C9B=IABYFHSAZ5YE4JK67BOOHWXZM3E3Q6LHRDFAOMFFBNIQYMWUZOXRA33UAIVOJD5FAGMHAXRKCCL2HARJ4LAJGRSQHE; JSESSIONID=15DDE98E89B0969607732C2F29F9F2D9.s1; shshshsID=23c768d5288b41e5c8e61dbc42ebc7a2_5_1665374408647; __jdb=122270672.7.1597106510361611076602|80.1665373051"
-
-COOKIE_EX = "shshshfp=caefc69b6768cd111c99a460655bb289; shshshfpa=95ab20f8-b48b-89f8-5db5-8787e436ce9e-1664283283; __jda=181809404.1664283283695694866099.1664283284.1664283284.1664283284.1; __jdc=181809404; __jdv=181809404|direct|-|none|-|1664283283696; shshshfpb=nIS6gB-jQt-BcAJGlz7hIzQ; areaId=2; ipLoc-djd=2-2825-51931-0; thor=C415B3C186C7F2E97A4AA78C1DB6835FF7FA2D1AF231616DC09ABB67E29A5ED8C7902802A3E717B04C6928B96460FC93B170D7DF7D7BA01C564461C12C52DF05690D169F0065D13831EED62E6879C6C8EEDED78B187B953E6CAF9C77BEAFD5477BBB2C766CE8C1D5E99E036E2EB8335DA504E5AC4B33E167598873BA4B7C603D0CAE89148C0A4601CBBD58C938A05497; pin=FioreZhang; unick=FioreZhang; shshshsID=cb3a14a6ef54a5f3162e51a9ac1bd224_3_1664284678331; __jdb=181809404.3.1664283283695694866099|1.1664283284; 3AB9D23F7A4B3C9B=UPYTMIZIVHNKESRM6TU675GIRMPYP3L4A4FD7UFAYT64M6A5IRB27R43X2XEGKZMHFJEFASKPAWRD7REP7YXMEHTKE"
+#cookie需要timely更新，否则影响抓取comment等等功能（退出再登陆，页面刷新，控制台-网络-搜索'club'-请求标头-cookie，删除thor这一项）
+COOKIE = "__jdu=1597106510361611076602; shshshfpa=e8c04075-2ed8-8c17-9a2e-5eb000215962-1597106511; pinId=lSwRbMKd-74tBDbKmwsL1w; shshshfpb=hYFEa8t4oszf5zty/aI7r1Q==; pin=FioreZhang; unick=FioreZhang; _tp=IcTvqSKCNvN8JKtp2uhsOg==; _pst=FioreZhang; user-key=af8a322e-ee27-4494-b626-23ba0a85acdd; __jdv=76161171|direct|-|none|-|1665214405491; PCSYCityID=CN_310000_310100_0; areaId=2; ipLoc-djd=2-2817-51973-0; jwotest_product=99; __jda=122270672.1597106510361611076602.1597106510.1665459618.1665465217.86; __jdc=122270672; jsavif=0; shshshfp=4fb4889ad884f65329321193d8b66aa0; ip_cityCode=2817; wlfstk_smdl=2cxvavpgjrrg0erxi6tlt8mp56flsfdu; TrackID=1dwqGdxTpXmf-xSAdYww75ZCApuCdGeqZkxqrqQ6J2EY60tbJGiOhIQrTE8YDZYo-zbcPftkmDIO8K9yLBS2LWaudqWjvgvcI6zGf8zSWvpzH7jufmJAWodU9hBtglZHj; thor=C415B3C186C7F2E97A4AA78C1DB6835F66F72E846B55CC8C183F33C5F513BED92A88CE6574789B4298ECF48682AC7F198370A2306FB78533E1B8AFD567593608EF2275DF6A46864881149008683DF964E7C3127E58FA652B95BFF7A5A3C98736C3EDD636ADE2CBD1DF8A9BA29499792E7043C427ED709072CF405EBAFE4911EC62A257BCFC270011268DA63813652357; ceshi3.com=201; token=d5cca5e704a78dac87a9300fe6d05fb2,3,925258; __tk=6cae1d481a65955824764d4cb5c8ccc3,3,925258; 3AB9D23F7A4B3C9B=IABYFHSAZ5YE4JK67BOOHWXZM3E3Q6LHRDFAOMFFBNIQYMWUZOXRA33UAIVOJD5FAGMHAXRKCCL2HARJ4LAJGRSQHE; JSESSIONID=5E495E9654446D41C97121CE8A489571.s1; shshshsID=4b96ab4eea17e74aafe47084f9d6d3a3_6_1665465273490; __jdb=122270672.9.1597106510361611076602|86.1665465217"
+#cookie需要timely更新，否则影响抓取comment等等功能（退出再登陆，页面刷新，找一个海外购商品页面，控制台-网络-第一行当前页面-请求标头-cookie，删除thor这一项）
+COOKIE_EX = "shshshfpa=862a6605-db4a-6154-47e5-af19cfa7c8bf-1664271435; __jdv=181809404|search.jd.com|-|referral|-|1664271435321; shshshfpb=whRyyEaaTJJ9UrwxkKsPvPg; areaId=2; ipLoc-djd=2-2817-51973-0; shshshfp=4fb4889ad884f65329321193d8b66aa0; __jdc=181809404; 3AB9D23F7A4B3C9B=IABYFHSAZ5YE4JK67BOOHWXZM3E3Q6LHRDFAOMFFBNIQYMWUZOXRA33UAIVOJD5FAGMHAXRKCCL2HARJ4LAJGRSQHE; shshshsID=feb97181256df9fca61850206dfd023e_1_1665448565902; __jda=181809404.1664271435320884582036.1664271435.1665420953.1665448566.6; __jdb=181809404.1.1664271435320884582036|6.1665448566"
 
 USERAGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0"
 
 # ======== MACROS ========
-MAXPAGE = 50
+MAXPAGE = 100
 TIMEOUT = 10
-RETRY = 3
+RETRY = 1
 NUMTAGS = 12
 FILE_CONFIG_DETAIL = "configDetail.csv"
 FILE_CONFIG_MASTER = "configMaster.csv"
+FILE_CONFIG_COMMENT = "configComment.csv"
 SPECIAL_SPLIT = "█"
 SPECIAL_ID_HEAD = "_"
 
 #表头
-# "年", "月", "日", "星期", "时间", "ID", "LINK", "销量指数", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌", SPECIAL_SPLIT, =INDEX=, SPECIAL_SPLIT, =DETAIL=, SPECIAL_SPLIT, "好评率", "中评率", "差评率", "好评数", "中评数", "差评数", "TAG00", "TAG01", "TAG02", "TAG03", "TAG04", "TAG05", "TAG06", "TAG07", "TAG08", "TAG09", "TAG10", "TAG11"
+# "年", "月", "日", "星期", "时间", "ID", "LINK", "销量指数", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌", SPECIAL_SPLIT, =INDEX=, SPECIAL_SPLIT, =DETAIL=, SPECIAL_SPLIT, "好评率", "中评率", "差评率", "好评数", "中评数", "差评数"
 
 HELP  = "===============================================================================\n"
 HELP += "==  JD Script to capture data from end-user interface                        ==\n"
@@ -53,15 +56,20 @@ HELP += "==         --search x: Search for segment[x] from configMaster.csv     
 HELP += "==           --count x: Plan to capture x+ skus for current segment          ==\n"
 HELP += "==           --setup 1/0: Turn on/off generate parameter for current segment ==\n" 
 HELP += "==         --comment 1/0: Turn on/off capture comments function              ==\n"
+HELP += "==           --text 1/0: Turn on/off comments list and excel function        ==\n"
 HELP += "==           --sku x: Capture comments for sku x                             ==\n"
-HELP += "==           --list x: Capture comments for skus in x.txt                    ==\n"
+HELP += "==           --index x: Capture comments for index x in configComment.csv    ==\n"
 HELP += "==  Examples:                                                                ==\n"
 HELP += "==         python jd.py --search 2 --count 100                               ==\n"
 HELP += "==           Capture data for 100+ top volume skus for segment[2]            ==\n"
 HELP += "==         python jd.py --search 3 --setup 1                                 ==\n"
 HELP += "==           Generate parameters in configDetail.csv for segment[3]          ==\n"
-HELP += "==         python jd.py --comment 1 --sku 10000                              ==\n"
-HELP += "==           Capture comments for sku 10000                                  ==\n"
+HELP += "==         python jd.py --comment 1 --sku 10000 --text 1                     ==\n"
+HELP += "==           Capture comments for sku 10000, and generate text and csv       ==\n"
+HELP += "==         python jd.py --comment 1 --index all                              ==\n"
+HELP += "==           Capture comments for all categories in config file              ==\n"
+HELP += "==         python jd.py --comment 1 --index 2                                ==\n"
+HELP += "==           Capture comments for category 2 in config file                  ==\n"
 HELP += "===============================================================================\n"
 
 '''
@@ -483,7 +491,24 @@ def colorFunc(word=None, font_size=None, position=None, orientation=None, font_p
     #返回一个rgb颜色元组
     return (r,g,b)
 
-def saveComment(sku, level, commentPool, path): 
+#在图片上加字符串
+def addStringToImg(image, string, x, y): 
+    bk_img = cv2.imread(image)
+    #设置需要显示的字体
+    fontpath = 'comment/fonts/simyou.ttf'
+    font = ImageFont.truetype(fontpath, 25)
+    img_pil = Image.fromarray(bk_img)
+    draw = ImageDraw.Draw(img_pil)
+    #绘制文字信息
+    draw.text((x, y),  string, font = font, fill = (0, 0, 0))
+    bk_img = numpy.array(img_pil)
+
+    #cv2.imshow("add_text",bk_img)
+    #cv2.waitKey()
+    cv2.imwrite(image,bk_img)
+
+#生成词云
+def saveComment(sku, level, commentPool, path, text): 
     MAXWORD = 50
     commentList = commentPool[level]
     if path is None or path == "":
@@ -492,12 +517,13 @@ def saveComment(sku, level, commentPool, path):
     if (len(commentList) > 0):
         mkdir(validateTitle(path))
         #保存所有评论文本
-        stringbreak = '\r\n'+'-'*20+'\r\n'
-        with open(path+os.sep+path+'_'+level+'.txt', 'w') as f:
-            for comment in commentList:
-                f.write(comment)
-                f.write(stringbreak)
-            f.close()
+        if text == 1:
+            stringbreak = '\r\n'+'-'*20+'\r\n'
+            with open(path+os.sep+path+'_'+level+'.txt', 'w') as f:
+                for comment in commentList:
+                    f.write(comment)
+                    f.write(stringbreak)
+                f.close()
         #生成词云 - jieba分词
         commentAllText = " ".join(commentList)
         commentAllWord = jieba.cut(commentAllText, cut_all = True)
@@ -507,21 +533,59 @@ def saveComment(sku, level, commentPool, path):
         content = [line.strip() for line in open('comment/stopwords.txt','r',encoding='utf-8').readlines()]
         stopwords.update(content)
         # - 生成词频
-        c = Counter()
-        for x in commentAllWordSplit.split(' '):
-            if len(x) > 1 and x not in stopwords:
-                c[x] += 1
-        with open(path+os.sep+path+'_'+level+'.csv', 'w', encoding='utf-8-sig') as f:
-            for (k,v)in c.most_common(MAXWORD):
-                f.write(k+','+str(v)+'\n')
-            f.close()
+        if text == 1:
+            c = Counter()
+            for x in commentAllWordSplit.split(' '):
+                if len(x) > 1 and x not in stopwords:
+                    c[x] += 1
+            with open(path+os.sep+path+'_'+level+'.csv', 'w', encoding='utf-8-sig') as f:
+                for (k,v)in c.most_common(MAXWORD):
+                    f.write(k+','+str(v)+'\n')
+                f.close()
         # - 生成词云 mask = imageio.imread('comment'+os.sep+level+'.jpg'), 
-        contentWordCloud = WordCloud(background_color = 'white', color_func = colorFunc, width = 800, height = 500, max_font_size= 60, min_font_size = 20, font_step = 10, font_path = 'comment/fonts/sthupo.ttf', max_words = MAXWORD, stopwords= stopwords).generate(commentAllWordSplit)
+        contentWordCloud = WordCloud(background_color = 'white', color_func = colorFunc, width = 640, height = 480, max_font_size= 60, min_font_size = 20, font_step = 10, font_path = 'comment/fonts/sthupo.ttf', max_words = MAXWORD, stopwords= stopwords).generate(commentAllWordSplit)
         # - 生成图片并保存
+        imageTemp = '_temp.png'
+        timeStamp = time.strftime("%Y_%m_%d_%H_%M", time.localtime())
         plt.imshow(contentWordCloud)
         plt.axis("off")
-        plt.savefig(path+os.sep+path+'_'+level+'.png')
+        plt.savefig(imageTemp)
         #plt.show()
+        # - 给图片加标记
+        addStringToImg(imageTemp, path+'  '+level, 0, 0)
+        addStringToImg(imageTemp, timeStamp, 420, 455)
+        imageFinal = path+os.sep+path+'_'+level+"_"+timeStamp+'.png'
+        os.rename(imageTemp, imageFinal)
+
+#根据index获取指定范围sku的list，返回类似于[[1, "Lenovo Y9000P", [1000, 1001, 1002, 1003]],[],[]]
+def getCommentCategoryList(index):
+    cateList = [] #二级list，存放需要抓取的类别的list
+
+    try:
+        if os.path.exists(FILE_CONFIG_COMMENT):
+            rowList = parseCsv(FILE_CONFIG_COMMENT)
+            
+            if index.lower() == 'all': #抓取配置文件里所有行的评论
+                for row in rowList:
+                    if len(row) > 2:
+                        skuIndex = row[0].lower()
+                        skuCate = row[1]
+                        skuList = row[2:]
+                        skuList = [x for x in skuList if x != '']
+                        cateList.append([skuIndex, skuCate, skuList])   
+            else: #只根据index抓取指定的行
+                skuIndex = index.lower()
+                for row in rowList:
+                    if row[0].lower() == skuIndex:
+                        skuCate = row[1]
+                        skuList = row[2:]
+                        skuList = [x for x in skuList if x != '']
+                        cateList.append([skuIndex, skuCate, skuList]) 
+                        break
+    except Exception as ex:
+        print("Please ensure the config file is closed")
+        pass             
+    return cateList
     
 # ======== CAPTURE OTHER INFO ========
 def getInfo(sku):
@@ -752,7 +816,8 @@ def loadTable(fData, keyword):
                 skuDetail.append(SPECIAL_SPLIT)
                 #第四组评价信息
                 rowConfigPart = rowConfig[listSpecialSplit[2]+1 :]
-                for index in ["好评率", "中评率", "差评率", "好评数", "中评数", "差评数", "TAG00", "TAG01", "TAG02", "TAG03", "TAG04", "TAG05", "TAG06", "TAG07", "TAG08", "TAG09", "TAG10", "TAG11"]:
+                #for index in ["好评率", "中评率", "差评率", "好评数", "中评数", "差评数", "TAG00", "TAG01", "TAG02", "TAG03", "TAG04", "TAG05", "TAG06", "TAG07", "TAG08", "TAG09", "TAG10", "TAG11"]:
+                for index in ["好评率", "中评率", "差评率", "好评数", "中评数", "差评数"]:
                     if index in rowConfigPart:    
                         skuDetail.append(row[rowConfigPart.index(index) + listSpecialSplit[2]+1])
                     else:
@@ -783,8 +848,8 @@ def generateTable(fData, keyword, count):
         row.append(index) 
     row.append(SPECIAL_SPLIT)
     row.extend(["好评率", "中评率", "差评率", "好评数", "中评数", "差评数"])
-    for i in range(NUMTAGS):
-        row.append("TAG" + str(i).zfill(2))                
+    #for i in range(NUMTAGS):
+    #    row.append("TAG" + str(i).zfill(2))                
     appendCsv(TEMPFILE_DATA, row)  #写入
     rowHead = row
 
@@ -826,7 +891,7 @@ def generateTable(fData, keyword, count):
             halfpage = getHalfPage(sku, skupagelist)
             skuname, shop, goodshop, brand, listinfo, listtableindex, listtabledata = getInfo(sku)
             summary = getCommentRate(sku)
-            tags = getCommentTags(sku)
+            #tags = getCommentTags(sku)
             
             if price_p == None or price_p == "" or skuname == None or skuname == "" or listinfo == None or len(listinfo) == 0 or summary[0] == 0:
                 #time.sleep(3)
@@ -852,8 +917,8 @@ def generateTable(fData, keyword, count):
             row.append(SPECIAL_SPLIT)                    
             for item in summary:
                 row.append(item)
-            for item in tags:
-                row.append(item)
+            #for item in tags:
+            #    row.append(item)
             appendCsv(fData, row) #写入
         
             time.sleep(1)   #慢一点……
@@ -867,11 +932,11 @@ def getArgs():
     parser.add_argument("--count", type=int, default=100)
     parser.add_argument("--setup", type=int, default=0)
     parser.add_argument("--comment", type=int, default=0)
+    parser.add_argument("--text", type=int, default=0)
     parser.add_argument("--sku", type=int, default=0)
-    parser.add_argument("--list", type=str, default='')
+    parser.add_argument("--index", type=str, default="")
     args = parser.parse_args()
     return args
-
 
 
 if __name__ == "__main__":
@@ -881,33 +946,37 @@ if __name__ == "__main__":
     COUNT = args.count
     SETUP = args.setup
     COMMENT = args.comment
+    TEXT = args.text
     SKU = args.sku
-    LIST = args.list
+    INDEX = args.index
     
     print(HELP)
     
     if COMMENT == 1:
-        if LIST != '':
-            print("Get comments for list: " + LIST)
-            with open(LIST+'.txt', 'r') as f:
+        if INDEX != "":
+            cateList = getCommentCategoryList(INDEX)
+            for cate in cateList:
+                print("Get comments for index: " + cate[0] + " - " + cate[1])
+                skuList = cate[2]
                 commentPool = {'good':[], 'middle':[], 'bad':[]}
-                while True:
-                    line = f.readline()
-                    print(line)
-                    if line != '':
-                        sku = int(line)
-                        commentCurrent = getCommentDetails(sku)
-                        for level in ['good', 'middle', 'bad']:
-                            commentPool[level].extend(commentCurrent[level])
-                    else:
-                        break
-                for level in ['good', 'middle', 'bad']:
-                    saveComment(sku, level, commentPool, LIST)        
-        else:
+                for sku in skuList:
+                    sku = sku.strip(SPECIAL_ID_HEAD)
+                    print("Get comments for sku: " + str(sku))
+                    commentCurrent = getCommentDetails(sku)
+                    #for level in ['good', 'middle', 'bad']:
+                    for level in ['good', 'bad']:
+                        commentPool[level].extend(commentCurrent[level])
+                #for level in ['good', 'middle', 'bad']:
+                for level in ['good', 'bad']:
+                    saveComment(sku, level, commentPool, cate[1], TEXT)           
+        elif SKU != 0:
             print("Get comments for sku: " + str(SKU))
             commentPool = getCommentDetails(SKU)
-            for level in ['good', 'middle', 'bad']:
-                saveComment(SKU, level, commentPool, "")    
+            #for level in ['good', 'middle', 'bad']:
+            for level in ['good', 'bad']:
+                saveComment(SKU, level, commentPool, "", TEXT)    
+        else:
+            print("Please input a valid index or sku for comment capture!")
     else:
         #转换序号为关键字
         #KeywordList = ["游戏本", "轻薄本", "设计本", "显卡", "EVO笔记本"]#定义关键字列表，注意该关键字会在config文件中对应相关配置
