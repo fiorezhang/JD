@@ -3,7 +3,7 @@
 # ================================================================  #
 #                                                                   #
 #                    INTERNAL STUDY ONLY !                          #
-#                        VERSION 6.2                                #
+#                        VERSION 6.4                                #
 #                                                                   #
 # ================================================================  #
 
@@ -49,8 +49,9 @@ SPECIAL_ID_HEAD = "_"
 #表头
 # "年", "月", "日", "星期", "时间", "ID", "LINK", "销量指数", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌", SPECIAL_SPLIT, =INDEX=, SPECIAL_SPLIT, =DETAIL=, SPECIAL_SPLIT, "好评率", "中评率", "差评率", "好评数", "中评数", "差评数"
 
-HELP  = "===============================================================================\n"
+HELP  = "-------------------------------------------------------------------------------\n"
 HELP += "==  JD Script to capture data from end-user interface                        ==\n"
+HELP += "==                                                                           ==\n"
 HELP += "==  Usage:                                                                   ==\n"
 HELP += "==         --search x: Search for segment[x] from configMaster.csv           ==\n"
 HELP += "==           --count x: Plan to capture x+ skus for current segment          ==\n"
@@ -59,6 +60,7 @@ HELP += "==         --comment 1/0: Turn on/off capture comments function        
 HELP += "==           --text 1/0: Turn on/off comments list and excel function        ==\n"
 HELP += "==           --sku x: Capture comments for sku x                             ==\n"
 HELP += "==           --index x: Capture comments for index x in configComment.csv    ==\n"
+HELP += "==                                                                           ==\n"
 HELP += "==  Examples:                                                                ==\n"
 HELP += "==         python jd.py --search 2 --count 100                               ==\n"
 HELP += "==           Capture data for 100+ top volume skus for segment[2]            ==\n"
@@ -70,7 +72,8 @@ HELP += "==         python jd.py --comment 1 --index all                        
 HELP += "==           Capture comments for all categories in config file              ==\n"
 HELP += "==         python jd.py --comment 1 --index 2                                ==\n"
 HELP += "==           Capture comments for category 2 in config file                  ==\n"
-HELP += "===============================================================================\n"
+HELP += "==                                                                           ==\n"
+HELP += "-------------------------------------------------------------------------------\n"
 
 '''
     parser.add_argument("--search", type=int, default=0)
@@ -306,6 +309,7 @@ def getPrice(sku):
 
 
 # ======== CAPTURE COMMENTS ========       
+'''
 def getCommentRate(sku):
     head = {'User-Agent': USERAGENT, 
             'Cookie': COOKIE, 
@@ -340,6 +344,69 @@ def getCommentRate(sku):
     commentSummary = [0, 0, 0, 0, 0, 0]
     try:
         commentSummary = [summary['GoodRate'], summary['GeneralRate'], summary['PoorRate'], normalizeCountStr(summary['GoodCountStr']), normalizeCountStr(summary['GeneralCountStr']), normalizeCountStr(summary['PoorCountStr'])]
+    except:
+        pass
+    #print(commentSummary)
+
+    return commentSummary
+'''
+
+def getCommentRate(sku):
+    head = {'User-Agent': USERAGENT,  
+            'Cookie': COOKIE, 
+            'Referer': 'https://item.jd.com'}  
+    head_ex = {'User-Agent': USERAGENT,  
+            'Cookie': COOKIE_EX, 
+            'Referer': 'https://item.jd.com'}          
+            
+    url = 'https://sclub.jd.com/comment/skuProductPageComments.action?&productId=' + str(sku) + '&score=0&sortType=5&page=0&pageSize=10&isShadowSku=0&fold=1'
+    #print(url)
+    #html = requests.get(url)
+    #print(html.status_code)
+    
+    #提取最多多少条标签，电脑页面大部分tag数量是11个及以内
+    numTags = NUMTAGS
+    
+    #获得原始评论页面的数据，提取总结部分与标签部分的数据
+    tags = []
+    retry = RETRY
+    while retry > 0:
+        #一般场景，国内商品
+        try:        
+            request = urllib.request.Request(url, headers=head)
+            response = urllib.request.urlopen(request)
+            content = response.read().decode('gbk')
+            #print(content)
+
+            result = json.loads(content)
+            summary = result['productCommentSummary']
+            #tags = result['hotCommentTagStatistics']
+            if summary != "" and summary != None:
+                break
+        except Exception as ex:
+            pass  
+        #特殊场景，海外购，url和cookie都不一样    
+        try:    
+            request = urllib.request.Request(url, headers=head_ex)
+            response = urllib.request.urlopen(request)
+            content = response.read().decode('gbk')
+            #print(content)
+
+            result = json.loads(content)
+            summary = result['productCommentSummary']
+            #tags = result['hotCommentTagStatistics']
+            if summary != "" and summary != None:
+                break           
+        except Exception as ex:
+            pass            
+        retry -= 1
+        print("    == Retry getCommentTags(), can fix occational network lag")
+        time.sleep(2)
+    
+    #提取好评率，中评率，差评率
+    commentSummary = [0, 0, 0, 0, 0, 0]
+    try:
+        commentSummary = [summary['goodRate'], summary['generalRate'], summary['poorRate'], normalizeCountStr(summary['goodCountStr']), normalizeCountStr(summary['generalCountStr']), normalizeCountStr(summary['poorCountStr'])]
     except:
         pass
     #print(commentSummary)
@@ -556,6 +623,7 @@ def saveComment(sku, level, commentPool, path, text):
         addStringToImg(imageTemp, timeStamp, 420, 455)
         imageFinal = path+os.sep+path+'_'+level+"_"+timeStamp+'.png'
         os.rename(imageTemp, imageFinal)
+        print("Generated wordcloud for: "+path+"\n")
 
 #根据index获取指定范围sku的list，返回类似于[[1, "Lenovo Y9000P", [1000, 1001, 1002, 1003]],[],[]]
 def getCommentCategoryList(index):
@@ -882,6 +950,8 @@ def generateTable(fData, keyword, count):
         #实际要抓取的sku货号
         listskuThis = sorted(list(set(listskuAdd) - set(listSkuOld)), key = listskuAdd.index)
         print("Excuting records: ", len(listskuThis))
+        #准备记录抓取失败的sku
+        listskuDrop = []
 
         #对每个sku，抓取价格和信息
         for sku in listskuThis:
@@ -896,6 +966,7 @@ def generateTable(fData, keyword, count):
             if price_p == None or price_p == "" or skuname == None or skuname == "" or listinfo == None or len(listinfo) == 0 or summary[0] == 0:
                 #time.sleep(3)
                 print("    == Miss information, drop current sku......")
+                listskuDrop.append(sku)
                 continue    #信息不全，跳过这一条不写入
             
             #信息准备好后开始一次性写入一行
@@ -922,6 +993,21 @@ def generateTable(fData, keyword, count):
             appendCsv(fData, row) #写入
         
             time.sleep(1)   #慢一点……
+        
+        listskuDropInAdd = [x for x in listskuDrop if x in listAdditional]
+        print("")
+        print("-" * 20)
+        print("Target records: ", len(listskuThis))
+        print("Actual records: ", len(listskuThis) - len(listskuDrop))
+        print("Droped records: ", len(listskuDrop))
+        print("-" * 20)
+        print("Target records from additional list: ", len(listAdditional))
+        print("Actual records from additional list: ", len(listAdditional) - len(listskuDropInAdd))
+        print("Droped records from additional list: ", len(listskuDropInAdd))
+        print("-" * 20)
+        for sku in listskuDropInAdd: 
+            print(str(sku))
+        print("-" * 20)
 
 
 # ======== MAIN ========
@@ -983,18 +1069,21 @@ if __name__ == "__main__":
         rowsKeywordList = parseCsv(FILE_CONFIG_MASTER)
         KeywordList = rowsKeywordList[0]
         #print(KeywordList)
-        KEYWORD = KeywordList[SEARCH]
-        print("Get data for segment: " + KEYWORD)
-        
-        if SETUP == 1:
-            #对新的搜索关键字，生成config参数，后期也可以自行修改
-            generateConfig(KEYWORD)
-        else:
-            #定义保存数据的表格文件名
-            fData ="DATA_"+str(KEYWORD)+"_"+time.strftime("%Y_%m", time.localtime())+".csv"
+        if SEARCH in range(len(KeywordList)):
+            KEYWORD = KeywordList[SEARCH]
+            print("Get data for segment: " + KEYWORD)
             
-            #生成表格
-            generateTable(fData, KEYWORD, COUNT)
+            if SETUP == 1:
+                #对新的搜索关键字，生成config参数，后期也可以自行修改
+                generateConfig(KEYWORD)
+            else:
+                #定义保存数据的表格文件名
+                fData ="DATA_"+str(KEYWORD)+"_"+time.strftime("%Y_%m", time.localtime())+".csv"
+                
+                #生成表格
+                generateTable(fData, KEYWORD, COUNT)
+        else:
+            print("Please input a valid index for search!")
 
     print("")
     print("Finished. ")
