@@ -3,7 +3,7 @@
 # ================================================================  #
 #                                                                   #
 #                    INTERNAL STUDY ONLY !                          #
-#                        VERSION 6.8                                #
+#                        VERSION 6.9                                #
 #                                                                   #
 # ================================================================  #
 
@@ -29,7 +29,7 @@ from PIL import ImageFont, ImageDraw, Image
 
 # ======== COOKIE FOR WEB REQUEST ========
 #cookie需要timely更新，否则影响抓取comment等等功能（退出再登陆，页面刷新，控制台-网络-搜索'club'-请求标头-cookie，删除thor这一项）
-COOKIE = "__jdu=1597106510361611076602; shshshfpa=e8c04075-2ed8-8c17-9a2e-5eb000215962-1597106511; pinId=lSwRbMKd-74tBDbKmwsL1w; shshshfpb=hYFEa8t4oszf5zty/aI7r1Q==; pin=FioreZhang; unick=FioreZhang; _tp=IcTvqSKCNvN8JKtp2uhsOg==; _pst=FioreZhang; user-key=af8a322e-ee27-4494-b626-23ba0a85acdd; __jdv=76161171|direct|-|none|-|1665214405491; PCSYCityID=CN_310000_310100_0; areaId=2; ipLoc-djd=2-2817-51973-0; jwotest_product=99; __jda=122270672.1597106510361611076602.1597106510.1665459618.1665465217.86; __jdc=122270672; jsavif=0; shshshfp=4fb4889ad884f65329321193d8b66aa0; ip_cityCode=2817; wlfstk_smdl=2cxvavpgjrrg0erxi6tlt8mp56flsfdu; TrackID=1dwqGdxTpXmf-xSAdYww75ZCApuCdGeqZkxqrqQ6J2EY60tbJGiOhIQrTE8YDZYo-zbcPftkmDIO8K9yLBS2LWaudqWjvgvcI6zGf8zSWvpzH7jufmJAWodU9hBtglZHj; thor=C415B3C186C7F2E97A4AA78C1DB6835F66F72E846B55CC8C183F33C5F513BED92A88CE6574789B4298ECF48682AC7F198370A2306FB78533E1B8AFD567593608EF2275DF6A46864881149008683DF964E7C3127E58FA652B95BFF7A5A3C98736C3EDD636ADE2CBD1DF8A9BA29499792E7043C427ED709072CF405EBAFE4911EC62A257BCFC270011268DA63813652357; ceshi3.com=201; token=d5cca5e704a78dac87a9300fe6d05fb2,3,925258; __tk=6cae1d481a65955824764d4cb5c8ccc3,3,925258; 3AB9D23F7A4B3C9B=IABYFHSAZ5YE4JK67BOOHWXZM3E3Q6LHRDFAOMFFBNIQYMWUZOXRA33UAIVOJD5FAGMHAXRKCCL2HARJ4LAJGRSQHE; JSESSIONID=5E495E9654446D41C97121CE8A489571.s1; shshshsID=4b96ab4eea17e74aafe47084f9d6d3a3_6_1665465273490; __jdb=122270672.9.1597106510361611076602|86.1665465217"
+COOKIE = "__jdu=1597106510361611076602; shshshfpa=e8c04075-2ed8-8c17-9a2e-5eb000215962-1597106511; pinId=lSwRbMKd-74tBDbKmwsL1w; pin=FioreZhang; unick=FioreZhang; _tp=IcTvqSKCNvN8JKtp2uhsOg==; _pst=FioreZhang; areaId=2; ipLoc-djd=2-2817-51973-0; shshshfpb=hYFEa8t4oszf5zty/aI7r1Q==; __jdv=76161171|direct|-|none|-|1668219239235; __jda=122270672.1597106510361611076602.1597106510.1667781090.1668219239.100; __jdc=122270672; jsavif=0; shshshfp=799c5770189861f2347384d08756273d; ip_cityCode=2817; wlfstk_smdl=r1nvr4cp3jyrd2qvom74l8otqq640ycr; TrackID=1onrpwjU6OphPxRx2r5A18d1RAYbxGlnOA2_YVsIfkk7eURDLhaezNtV_9R91FKcIffZMal2kif46ljKRWVp03ae6JOFLi5j26GxPL_WJKM8Affl0mfoOpZnoD9wYORsx; ceshi3.com=201; token=b08c9cbae5326822dddb1885532fd4e6,3,926788; __tk=1922cef957e16b1d8dc6e467dc2b598c,3,926788; 3AB9D23F7A4B3C9B=IABYFHSAZ5YE4JK67BOOHWXZM3E3Q6LHRDFAOMFFBNIQYMWUZOXRA33UAIVOJD5FAGMHAXRKCCL2HARJ4LAJGRSQHE; jwotest_product=99; JSESSIONID=6C87C95135F40487EF8EC16D1096B962.s1; shshshsID=4de4e80dee5534026a491d6fb6c1511e_5_1668219689481; __jdb=122270672.9.1597106510361611076602|100.1668219239; thor=C415B3C186C7F2E97A4AA78C1DB6835F66F72E846B55CC8C183F33C5F513BED97EF6F844D22C4A299A7A0024862F5BF4266B5DF47FE9C25AF5B91D7658D9B2650C9218DA7FE1DEC6C1DBB19844B3A9A249D0FD396FC7DB838E3C91DED246EED52C74A607A6ECA734E9CFB4E20744C83B922242064D43252223264668EB6D4ED68A2E70C07F571041521D68F1370109E3"
 #cookie需要timely更新，否则影响抓取comment等等功能（退出再登陆，页面刷新，找一个海外购商品页面，控制台-网络-第一行当前页面-请求标头-cookie，删除thor这一项）
 COOKIE_EX = "shshshfpa=862a6605-db4a-6154-47e5-af19cfa7c8bf-1664271435; __jdv=181809404|search.jd.com|-|referral|-|1664271435321; shshshfpb=whRyyEaaTJJ9UrwxkKsPvPg; areaId=2; ipLoc-djd=2-2817-51973-0; shshshfp=4fb4889ad884f65329321193d8b66aa0; __jdc=181809404; 3AB9D23F7A4B3C9B=IABYFHSAZ5YE4JK67BOOHWXZM3E3Q6LHRDFAOMFFBNIQYMWUZOXRA33UAIVOJD5FAGMHAXRKCCL2HARJ4LAJGRSQHE; shshshsID=feb97181256df9fca61850206dfd023e_1_1665448565902; __jda=181809404.1664271435320884582036.1664271435.1665420953.1665448566.6; __jdb=181809404.1.1664271435320884582036|6.1665448566"
 
@@ -269,7 +269,7 @@ def getPrice_Legacy(sku):
         else:
             break
         retry -= 1
-        print("    == Retry getPrice(), can fix occational network lag")
+        ##print("    == Retry getPrice(), can fix occational network lag")
         time.sleep(2)
     #print(price)
     return price
@@ -303,7 +303,7 @@ def getPrice(sku):
         else:
             break
         retry -= 1
-        print("    == Retry getPrice(), can fix occational network lag")
+        ##print("    == Retry getPrice(), can fix occational network lag")
         time.sleep(2)
     #print(price)
     return price_m, price_op, price_p    
@@ -338,7 +338,7 @@ def getCommentRate(sku):
         except Exception as ex:
             pass            
         retry -= 1
-        print("    == Retry getCommentRate(), can fix occational network lag")
+        ##print("    == Retry getCommentRate(), can fix occational network lag")
         time.sleep(2)
     
     #提取好评率，中评率，差评率
@@ -401,7 +401,7 @@ def getCommentRate(sku):
         except Exception as ex:
             pass            
         retry -= 1
-        print("    == Retry getCommentTags(), can fix occational network lag")
+        ##print("    == Retry getCommentTags(), can fix occational network lag")
         time.sleep(2)
     
     #提取好评率，中评率，差评率
@@ -463,7 +463,7 @@ def getCommentTags(sku):
         except Exception as ex:
             pass            
         retry -= 1
-        print("    == Retry getCommentTags(), can fix occational network lag")
+        ##print("    == Retry getCommentTags(), can fix occational network lag")
         time.sleep(2)
        
     commentTags = []
@@ -702,7 +702,7 @@ def getInfo(sku):
             listtableindex = htmltree.xpath('//div[@class="Ptable"]/div/dl/dl/dt/text()')
             listtabledata = htmltree.xpath('//div[@class="Ptable"]/div/dl/dl/dd[not(contains(@class,"Ptable-tips"))]/text()')
         except Exception as ex:
-            print(ex)
+            #print(ex)
             pass
         
         #if listskuname != [] and shop != [] and brand != [] and listinfo != []:
@@ -723,7 +723,7 @@ def getInfo(sku):
             listtableindex = htmltree.xpath('//div[@class="Ptable"]/div/dl/dl/dt/text()')
             listtabledata = htmltree.xpath('//div[@class="Ptable"]/div/dl/dl/dd[not(contains(@class,"Ptable-tips"))]/text()')
         except Exception as ex:
-            print(ex)
+            #print(ex)
             pass
         
         #if listskuname != [] and shop != [] and brand != [] and listinfo != []:
@@ -731,7 +731,7 @@ def getInfo(sku):
             break                   
             
         retry -= 1
-        print("    == Retry getInfo(), can fix occational network lag")
+        ##print("    == Retry getInfo(), can fix occational network lag")
         time.sleep(1)
     
     #处理名字
@@ -965,13 +965,14 @@ def generateTable(fData, keyword, url, count):
         #实际要抓取的sku货号
         listskuThis = sorted(list(set(listskuAdd) - set(listSkuOld)), key = listskuAdd.index)
         print("Excuting records: ", len(listskuThis))
+        print()
         #准备记录抓取失败的sku
         listskuDrop = []
 
         #对每个sku，抓取价格和信息
-        for sku in listskuThis:
-            print("")
-            print("Getting Price and Information for Sku "+str(sku))
+        for cSku, sku in enumerate(listskuThis):
+            progress = cSku/len(listskuThis)
+            print("\rProgress: %.1f%%  " % float(100*progress) + "[" + "="*int(20*progress) + "-"*(20-int(20*progress)) + "]  " + "Working on Sku " + str(sku) + " "*10, end='')
             price_m, price_op, price_p = getPrice(sku)
             halfpage = getHalfPage(sku, skupagelist)
             skuname, shop, goodshop, brand, listinfo, listtableindex, listtabledata = getInfo(sku)
@@ -979,8 +980,16 @@ def generateTable(fData, keyword, url, count):
             #tags = getCommentTags(sku)
             
             if price_p == None or price_p == "" or skuname == None or skuname == "" or listinfo == None or len(listinfo) == 0 or summary[0] == 0:
-                #time.sleep(3)
-                print("    == Miss information, drop current sku......")
+                errorCode = 0
+                if price_p == None or price_p == "":
+                    errorCode |= 1 
+                if skuname == None or skuname == "":
+                    errorCode |= 2 
+                if listinfo == None or len(listinfo) == 0:
+                    errorCode |= 4 
+                if summary[0] == 0:
+                    errorCode |= 8 
+                print("\r    == Miss info(ECode: " + str(errorCode) + "), drop sku " + str(sku) + " "*30)
                 listskuDrop.append(sku)
                 continue    #信息不全，跳过这一条不写入
             
@@ -1008,6 +1017,9 @@ def generateTable(fData, keyword, url, count):
             appendCsv(fData, row) #写入
         
             time.sleep(1)   #慢一点……
+        progress = 1
+        print("\rProgress: %.1f%%  " % float(100*progress) + "[" + "="*int(20*progress) + "-"*(20-int(20*progress)) + "]  " + " "*40, end='')
+        
         
         listskuDropInAdd = [x for x in listskuDrop if x in listAdditional]
         print("")
