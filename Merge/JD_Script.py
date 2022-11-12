@@ -3,7 +3,7 @@
 # ================================================================  #
 #                                                                   #
 #                    INTERNAL STUDY ONLY !                          #
-#                        VERSION 6.4                                #
+#                        VERSION 6.8                                #
 #                                                                   #
 # ================================================================  #
 
@@ -40,8 +40,9 @@ MAXPAGE = 100
 TIMEOUT = 10
 RETRY = 1
 NUMTAGS = 12
-FILE_CONFIG_DETAIL = "configDetail.csv"
 FILE_CONFIG_MASTER = "configMaster.csv"
+FILE_CONFIG_DETAIL = "configDetail.csv"
+FILE_CONFIG_FILTER = "configFilter.csv"
 FILE_CONFIG_COMMENT = "configComment.csv"
 SPECIAL_SPLIT = "█"
 SPECIAL_ID_HEAD = "_"
@@ -56,6 +57,7 @@ HELP += "==  Usage:                                                             
 HELP += "==         --search x: Search for segment[x] from configMaster.csv           ==\n"
 HELP += "==           --count x: Plan to capture x+ skus for current segment          ==\n"
 HELP += "==           --setup 1/0: Turn on/off generate parameter for current segment ==\n" 
+HELP += "==           --filter: Input URL with filters for current segment            ==\n"
 HELP += "==         --comment 1/0: Turn on/off capture comments function              ==\n"
 HELP += "==           --text 1/0: Turn on/off comments list and excel function        ==\n"
 HELP += "==           --sku x: Capture comments for sku x                             ==\n"
@@ -64,6 +66,8 @@ HELP += "==                                                                     
 HELP += "==  Examples:                                                                ==\n"
 HELP += "==         python jd.py --search 2 --count 100                               ==\n"
 HELP += "==           Capture data for 100+ top volume skus for segment[2]            ==\n"
+HELP += "==         python jd.py --search 2 --filter 1 --count 100                    ==\n"
+HELP += "==           Capture data for 100+ top volume skus for segment[2] filter[1]  ==\n"
 HELP += "==         python jd.py --search 3 --setup 1                                 ==\n"
 HELP += "==           Generate parameters in configDetail.csv for segment[3]          ==\n"
 HELP += "==         python jd.py --comment 1 --sku 10000 --text 1                     ==\n"
@@ -74,15 +78,6 @@ HELP += "==         python jd.py --comment 1 --index 2                          
 HELP += "==           Capture comments for category 2 in config file                  ==\n"
 HELP += "==                                                                           ==\n"
 HELP += "-------------------------------------------------------------------------------\n"
-
-'''
-    parser.add_argument("--search", type=int, default=0)
-    parser.add_argument("--count", type=int, default=100)
-    parser.add_argument("--setup", type=int, default=0)
-    parser.add_argument("--comment", type=int, default=0)
-    parser.add_argument("--sku", type=int, default=0)
-    parser.add_argument("--list", type=str, default='')
-'''
 
 
 # ======== MISC ========
@@ -164,7 +159,7 @@ def mkdir(path):
 # ======== CAPTURE LIST OF SKU ========
 #JD页面每一页默认刷新30个物品，下拉后再刷新30个。所以需要对于每一页分上下部分分别处理。
 #抓取上半页的物品sku number
-def getListPageUp(keyword, page):
+def getListPageUp(keyword, url, page):
     #对上半页，简单的构建header即可
     head = {'authority': 'search.jd.com',
             'method': 'GET',
@@ -172,10 +167,13 @@ def getListPageUp(keyword, page):
             'User-Agent': USERAGENT,
             }
     #对上半页，构造请求的页面
-    url = 'https://search.jd.com/Search?keyword='+str(keyword)+'&enc=utf-8&page='+str(2*page-1)+'&psort=3'
+    if url == None:
+        urlPage = 'https://search.jd.com/Search?keyword='+str(keyword)+'&enc=utf-8&page='+str(2*page-1)+'&psort=3'
+    else:
+        urlPage = url + '&page='+str(2*page-1)+'&psort=3'
 
     #获得页面HTML
-    response = requests.get(url, headers=head)
+    response = requests.get(urlPage, headers=head)
     response.encoding = 'utf-8'
     htmltree = etree.HTML(response.text)
     
@@ -189,8 +187,8 @@ def getListPageUp(keyword, page):
 
     return skulist
 
-#抓取上半页的物品sku number
-def getListPageDown(keyword, page): 
+#抓取下半页的物品sku number
+def getListPageDown(keyword, url, page): 
     #对下半页，构建header时需要包入referer等元素
     head = {'authority': 'search.jd.com',
             'method': 'GET',
@@ -201,10 +199,13 @@ def getListPageDown(keyword, page):
     }
     #对下半页，构造请求的页面
     timestp = '%.5f'%time.time() #获取当前的Unix时间戳，并且保留小数点后5位
-    url = 'https://search.jd.com/s_new.php?keyword='+str(keyword)+'&enc=utf-8&page='+str(2*page)+'&psort=3&s='+str(48*page-20)+'&scrolling=y&log_id='+str(timestp)
+    if url == None: 
+        urlPage = 'https://search.jd.com/s_new.php?keyword='+str(keyword)+'&enc=utf-8&page='+str(2*page)+'&psort=3&s='+str(48*page-20)+'&scrolling=y&log_id='+str(timestp)
+    else:
+        urlPage = url + '&page='+str(2*page)+'&psort=3&s='+str(48*page-20)+'&scrolling=y&log_id='+str(timestp)
 
     #获得页面HTML
-    response = requests.get(url, headers=head)
+    response = requests.get(urlPage, headers=head)
     response.encoding = 'utf-8'
     htmltree = etree.HTML(response.text)
     
@@ -219,19 +220,19 @@ def getListPageDown(keyword, page):
     return skulist
 
 #根据指定的关键字以及sku数，返回所有满足条件的sku number（已经去重）
-def getList(keyword, countnum):
+def getList(keyword, url, countnum):
     skulist = []
     skupagelist = []
     for page in range(1, MAXPAGE):
         print("Getting sku list for Page "+str(page))
         #获得每页上半页，如果没有新的sku就跳出循环
-        skulistUpdate = getListPageUp(keyword, page)
+        skulistUpdate = getListPageUp(keyword, url, page)
         if len(skulistUpdate) == 0:
             break
         skulist += skulistUpdate
         skupagelist.append(skulistUpdate)
         #获得每页下半页，如果没有新的sku就跳出循环
-        skulistUpdate = getListPageDown(keyword, page)
+        skulistUpdate = getListPageDown(keyword, url, page)
         if len(skulistUpdate) == 0:
             break
         skulist += skulistUpdate
@@ -558,21 +559,6 @@ def colorFunc(word=None, font_size=None, position=None, orientation=None, font_p
     #返回一个rgb颜色元组
     return (r,g,b)
 
-#在图片上加字符串
-def addStringToImg(image, string, x, y): 
-    bk_img = cv2.imread(image)
-    #设置需要显示的字体
-    fontpath = 'comment/fonts/simyou.ttf'
-    font = ImageFont.truetype(fontpath, 25)
-    img_pil = Image.fromarray(bk_img)
-    draw = ImageDraw.Draw(img_pil)
-    #绘制文字信息
-    draw.text((x, y),  string, font = font, fill = (0, 0, 0))
-    bk_img = numpy.array(img_pil)
-
-    #cv2.imshow("add_text",bk_img)
-    #cv2.waitKey()
-    cv2.imwrite(image,bk_img)
 
 #生成词云
 def saveComment(sku, level, commentPool, path, text): 
@@ -612,17 +598,46 @@ def saveComment(sku, level, commentPool, path, text):
         # - 生成词云 mask = imageio.imread('comment'+os.sep+level+'.jpg'), 
         contentWordCloud = WordCloud(background_color = 'white', color_func = colorFunc, width = 640, height = 480, max_font_size= 60, min_font_size = 20, font_step = 10, font_path = 'comment/fonts/sthupo.ttf', max_words = MAXWORD, stopwords= stopwords).generate(commentAllWordSplit)
         # - 生成图片并保存
-        imageTemp = '_temp.png'
         timeStamp = time.strftime("%Y_%m_%d_%H_%M", time.localtime())
+        fImage = path+os.sep+path+'_'+level+"_"+timeStamp+'.png'
         plt.imshow(contentWordCloud)
         plt.axis("off")
-        plt.savefig(imageTemp)
+        plt.savefig(fImage)
         #plt.show()
-        # - 给图片加标记
-        addStringToImg(imageTemp, path+'  '+level, 0, 0)
-        addStringToImg(imageTemp, timeStamp, 420, 455)
-        imageFinal = path+os.sep+path+'_'+level+"_"+timeStamp+'.png'
-        os.rename(imageTemp, imageFinal)
+    return path
+
+#在图片上加字符串
+def addStringToImg(image, string, x, y):
+    tempImg = '_temp.png'
+    os.rename(image, tempImg)
+    bk_img = cv2.imread(tempImg)
+    #设置需要显示的字体
+    fontpath = 'comment/fonts/simyou.ttf'
+    font = ImageFont.truetype(fontpath, 25)
+    img_pil = Image.fromarray(bk_img)
+    draw = ImageDraw.Draw(img_pil)
+    #绘制文字信息
+    draw.text((x, y),  string, font = font, fill = (0, 0, 0))
+    bk_img = numpy.array(img_pil)
+
+    #cv2.imshow("add_text",bk_img)
+    #cv2.waitKey()
+    cv2.imwrite(tempImg,bk_img)
+    os.rename(tempImg, image)
+
+#给图片加标注        
+def addFootprint(path, title, sku0, skuNum, commentNumLevel, commentNumAll): 
+    # - 给图片加标记
+    timeStamp = time.strftime("%Y_%m_%d_%H_%M", time.localtime())
+    fImage = path+os.sep+path+'_'+level+"_"+timeStamp+'.png'
+    
+    if os.path.exists(fImage):
+        addStringToImg(fImage, title + ' rate: ' + '%.0f%%'%(100*commentNumLevel/commentNumAll) + ' (' + str(commentNumLevel) + '/' + str(commentNumAll) + ')', 0, 0)
+        if int(skuNum) > 1:
+            addStringToImg(fImage, str(sku0.strip(SPECIAL_ID_HEAD)) + ' and ' + str(int(skuNum)-1) + ' other sample(s)', 0, 30)
+        else:
+            addStringToImg(fImage, str(sku0.strip(SPECIAL_ID_HEAD)), 0, 30)
+        addStringToImg(fImage, timeStamp, 420, 455)
         print("Generated wordcloud for: "+path+"\n")
 
 #根据index获取指定范围sku的list，返回类似于[[1, "Lenovo Y9000P", [1000, 1001, 1002, 1003]],[],[]]
@@ -794,7 +809,7 @@ def generateConfig(keyword):
                     appendCsv(TEMPFILE_CONFIG_DETAIL, [""])
 
     #抓取首页list
-    listsku, _ = getList(keyword, 50)
+    listsku, _ = getList(keyword, None, 50)
     listinfoindexpool = []
     listtableindexpool = []
     
@@ -896,9 +911,9 @@ def loadTable(fData, keyword):
     return listSkuDetail
 
 #根据需求生成表格
-def generateTable(fData, keyword, count):
-    TEMPFILE_DATA = "_data_" + str(KEYWORD) + ".csv"
-    BACKFILE_DATA = "_data_" + str(KEYWORD) + ".backup.csv"
+def generateTable(fData, keyword, url, count):
+    TEMPFILE_DATA = "_data_" + str(keyword) + ".csv"
+    BACKFILE_DATA = "_data_" + str(keyword) + ".backup.csv"
 
     #读取config文件
     listIndex, listDetail, listAdditional = getConfig(keyword)
@@ -940,7 +955,7 @@ def generateTable(fData, keyword, count):
     #如果没有达到需要的数量，继续抓数据
     if len(listSkuOld) < count or len(listAdditional) > 0:
         #抓取所有sku的货号
-        listsku, skupagelist = getList(keyword, count)
+        listsku, skupagelist = getList(keyword, url, count)
         print("Available records: ", len(listsku))
         #print(listsku)
         #加入手动添加的sku货号
@@ -1015,6 +1030,7 @@ def generateTable(fData, keyword, count):
 def getArgs():
     parser = argparse.ArgumentParser()
     parser.add_argument("--search", type=int, default=0)
+    parser.add_argument("--filter", type=int, default=-1)
     parser.add_argument("--count", type=int, default=100)
     parser.add_argument("--setup", type=int, default=0)
     parser.add_argument("--comment", type=int, default=0)
@@ -1029,6 +1045,7 @@ if __name__ == "__main__":
     #获取参数，search取得待搜索的字符串例如“游戏本”“显卡”，COUNT希望抓取的sku数量
     args = getArgs()
     SEARCH = args.search
+    FILTER = args.filter
     COUNT = args.count
     SETUP = args.setup
     COMMENT = args.comment
@@ -1049,39 +1066,54 @@ if __name__ == "__main__":
                     sku = sku.strip(SPECIAL_ID_HEAD)
                     print("Get comments for sku: " + str(sku))
                     commentCurrent = getCommentDetails(sku)
-                    #for level in ['good', 'middle', 'bad']:
-                    for level in ['good', 'bad']:
+                    for level in ['good', 'middle', 'bad']:
+                    #for level in ['good', 'bad']:
                         commentPool[level].extend(commentCurrent[level])
                 #for level in ['good', 'middle', 'bad']:
                 for level in ['good', 'bad']:
-                    saveComment(sku, level, commentPool, cate[1], TEXT)           
+                    path = saveComment(sku, level, commentPool, cate[1], TEXT)  
+                    addFootprint(path, path+'  '+level, str(skuList[0]), len(skuList), len(commentPool[level]), len(commentPool['good'])+len(commentPool['middle'])+len(commentPool['bad']))
         elif SKU != 0:
             print("Get comments for sku: " + str(SKU))
             commentPool = getCommentDetails(SKU)
             #for level in ['good', 'middle', 'bad']:
             for level in ['good', 'bad']:
-                saveComment(SKU, level, commentPool, "", TEXT)    
+                path = saveComment(SKU, level, commentPool, "", TEXT) 
+                addFootprint(path, path+'  '+level, str(skuList[0]), len(skuList), len(commentPool[level]), len(commentPool['good'])+len(commentPool['middle'])+len(commentPool['bad']))               
         else:
             print("Please input a valid index or sku for comment capture!")
     else:
         #转换序号为关键字
-        #KeywordList = ["游戏本", "轻薄本", "设计本", "显卡", "EVO笔记本"]#定义关键字列表，注意该关键字会在config文件中对应相关配置
-        rowsKeywordList = parseCsv(FILE_CONFIG_MASTER)
-        KeywordList = rowsKeywordList[0]
-        #print(KeywordList)
-        if SEARCH in range(len(KeywordList)):
-            KEYWORD = KeywordList[SEARCH]
-            print("Get data for segment: " + KEYWORD)
+        #searchList = ["游戏本", "轻薄本", "设计本", "显卡", "EVO笔记本"]#定义关键字列表，注意该关键字会在config文件中对应相关配置
+        rowsSearchList = parseCsv(FILE_CONFIG_MASTER)
+        searchList = rowsSearchList[0]
+        if FILTER != -1: 
+            rowsFilterList = parseCsv(FILE_CONFIG_FILTER)
+
+        #print(searchList)
+        if SEARCH in range(len(searchList)):
+            keywordSearch = searchList[SEARCH]
+            print("Get data for segment: " + keywordSearch)
+            
+            urlFilter = None
+            if FILTER != -1 and FILTER in range(len(rowsFilterList)):
+                urlFilter = rowsFilterList[FILTER][0]
+                print("Get data with filter: " + urlFilter)
+            else:
+                print("Please input a valid index for filter. ")
             
             if SETUP == 1:
                 #对新的搜索关键字，生成config参数，后期也可以自行修改
-                generateConfig(KEYWORD)
+                generateConfig(keywordSearch)
             else:
                 #定义保存数据的表格文件名
-                fData ="DATA_"+str(KEYWORD)+"_"+time.strftime("%Y_%m", time.localtime())+".csv"
+                if urlFilter == None: 
+                    fData = "DATA_"+str(keywordSearch)+"_"+time.strftime("%Y_%m", time.localtime())+".csv"
+                else: 
+                    fData = "DATA_"+str(keywordSearch)+"_"+str(FILTER)+"_"+time.strftime("%Y_%m", time.localtime())+".csv"
                 
                 #生成表格
-                generateTable(fData, KEYWORD, COUNT)
+                generateTable(fData, keywordSearch, urlFilter, COUNT)
         else:
             print("Please input a valid index for search!")
 
