@@ -585,16 +585,6 @@ def saveComment(sku, level, commentPool, path, text):
         stopwords = set()
         content = [line.strip() for line in open('comment/stopwords.txt','r',encoding='utf-8').readlines()]
         stopwords.update(content)
-        # - 生成词频
-        if text == 1:
-            c = Counter()
-            for x in commentAllWordSplit.split(' '):
-                if len(x) > 1 and x not in stopwords:
-                    c[x] += 1
-            with open(path+os.sep+path+'_'+level+'.csv', 'w', encoding='utf-8-sig') as f:
-                for (k,v)in c.most_common(MAXWORD):
-                    f.write(k+','+str(v)+'\n')
-                f.close()
         # - 生成词云 mask = imageio.imread('comment'+os.sep+level+'.jpg'), 
         contentWordCloud = WordCloud(background_color = 'white', color_func = colorFunc, width = 640, height = 480, max_font_size= 60, min_font_size = 20, font_step = 10, font_path = 'comment/fonts/sthupo.ttf', max_words = MAXWORD, stopwords= stopwords).generate(commentAllWordSplit)
         # - 生成图片并保存
@@ -604,16 +594,34 @@ def saveComment(sku, level, commentPool, path, text):
         plt.axis("off")
         plt.savefig(fImage)
         #plt.show()
+        # - 生成词频
+        c = Counter()
+        for x in commentAllWordSplit.split(' '):
+            if len(x) > 1 and x not in stopwords:
+                c[x] += 1
+        countFreqWord = 0
+        MAX_FREQ_WORD = 5
+        for (k,v)in c.most_common(MAXWORD): 
+            addStringToImg(fImage, k+': '+str(v), 0, 100+countFreqWord*30, 20)
+            countFreqWord+=1
+            if countFreqWord == MAX_FREQ_WORD: 
+                break
+        if text == 1:        
+            with open(path+os.sep+path+'_'+level+'.csv', 'w', encoding='utf-8-sig') as f:
+                for (k,v)in c.most_common(MAXWORD):
+                    f.write(k+','+str(v)+'\n')
+                f.close()
+                
     return path
 
 #在图片上加字符串
-def addStringToImg(image, string, x, y):
+def addStringToImg(image, string, x, y, fontsize=25):
     tempImg = '_temp.png'
     os.rename(image, tempImg)
     bk_img = cv2.imread(tempImg)
     #设置需要显示的字体
     fontpath = 'comment/fonts/simyou.ttf'
-    font = ImageFont.truetype(fontpath, 25)
+    font = ImageFont.truetype(fontpath, fontsize)
     img_pil = Image.fromarray(bk_img)
     draw = ImageDraw.Draw(img_pil)
     #绘制文字信息
@@ -1108,11 +1116,12 @@ if __name__ == "__main__":
             print("Get data for segment: " + keywordSearch)
             
             urlFilter = None
-            if FILTER != -1 and FILTER in range(len(rowsFilterList)):
-                urlFilter = rowsFilterList[FILTER][0]
-                print("Get data with filter: " + urlFilter)
-            else:
-                print("Please input a valid index for filter. ")
+            if FILTER != -1: 
+                if FILTER in range(len(rowsFilterList)):
+                    urlFilter = rowsFilterList[FILTER][0]
+                    print("Get data with filter: " + urlFilter)
+                else:
+                    print("Please input a valid index for filter. ")
             
             if SETUP == 1:
                 #对新的搜索关键字，生成config参数，后期也可以自行修改
