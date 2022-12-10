@@ -3,7 +3,7 @@
 # ================================================================  #
 #                                                                   #
 #                    INTERNAL STUDY ONLY !                          #
-#                        VERSION 6.9                                #
+#                        VERSION 7.0                                #
 #                                                                   #
 # ================================================================  #
 
@@ -29,7 +29,7 @@ from PIL import ImageFont, ImageDraw, Image
 
 # ======== COOKIE FOR WEB REQUEST ========
 #cookie需要timely更新，否则影响抓取comment等等功能（退出再登陆，页面刷新，控制台-网络-搜索'club'-请求标头-cookie，删除thor这一项）
-COOKIE = "__jdu=1597106510361611076602; shshshfpa=e8c04075-2ed8-8c17-9a2e-5eb000215962-1597106511; pinId=lSwRbMKd-74tBDbKmwsL1w; pin=FioreZhang; unick=FioreZhang; _tp=IcTvqSKCNvN8JKtp2uhsOg==; _pst=FioreZhang; areaId=2; ipLoc-djd=2-2817-51973-0; shshshfpb=hYFEa8t4oszf5zty/aI7r1Q==; __jdv=76161171|direct|-|none|-|1668219239235; __jda=122270672.1597106510361611076602.1597106510.1667781090.1668219239.100; __jdc=122270672; jsavif=0; shshshfp=799c5770189861f2347384d08756273d; ip_cityCode=2817; wlfstk_smdl=r1nvr4cp3jyrd2qvom74l8otqq640ycr; TrackID=1onrpwjU6OphPxRx2r5A18d1RAYbxGlnOA2_YVsIfkk7eURDLhaezNtV_9R91FKcIffZMal2kif46ljKRWVp03ae6JOFLi5j26GxPL_WJKM8Affl0mfoOpZnoD9wYORsx; ceshi3.com=201; token=b08c9cbae5326822dddb1885532fd4e6,3,926788; __tk=1922cef957e16b1d8dc6e467dc2b598c,3,926788; 3AB9D23F7A4B3C9B=IABYFHSAZ5YE4JK67BOOHWXZM3E3Q6LHRDFAOMFFBNIQYMWUZOXRA33UAIVOJD5FAGMHAXRKCCL2HARJ4LAJGRSQHE; jwotest_product=99; JSESSIONID=6C87C95135F40487EF8EC16D1096B962.s1; shshshsID=4de4e80dee5534026a491d6fb6c1511e_5_1668219689481; __jdb=122270672.9.1597106510361611076602|100.1668219239; thor=C415B3C186C7F2E97A4AA78C1DB6835F66F72E846B55CC8C183F33C5F513BED97EF6F844D22C4A299A7A0024862F5BF4266B5DF47FE9C25AF5B91D7658D9B2650C9218DA7FE1DEC6C1DBB19844B3A9A249D0FD396FC7DB838E3C91DED246EED52C74A607A6ECA734E9CFB4E20744C83B922242064D43252223264668EB6D4ED68A2E70C07F571041521D68F1370109E3"
+COOKIE = "__jdu=1662379846916272156429; shshshfpa=d99c5362-8a4b-a678-0024-58552f251967-1665473602; shshshfpb=iBuenWAhnUwZUs_Jf4CzWUA; TrackID=1YK2pXdZgAd6aZmz8KNcMcxp70DtjlW1eirjhGicSFs7oI2jGQqvkae32IZxw6MGR444uv27SvxAHPQtcsLo8KB_gbqDOnplZlqN1sgo1i2lb6wZ1pHYxgZ1n5oiOmsjb; pinId=lSwRbMKd-74tBDbKmwsL1w; pin=FioreZhang; unick=FioreZhang; _tp=IcTvqSKCNvN8JKtp2uhsOg==; _pst=FioreZhang; __jdv=76161171|direct|-|none|-|1668993673036; PCSYCityID=CN_310000_310100_0; jsavif=0; __jda=122270672.1662379846916272156429.1662379847.1667356629.1668993673.13; __jdc=122270672; shshshfp=80d8ef1a0606c264960f09f5e2bc236b; areaId=2; token=ae4c9f56f95861a472004865e50c72de,2,927218; __tk=jifolUeFJUuqkvn1Isq1JvkikUtEkpeyIDJilcaxJpG0jzIFjUnzJn,2,927218; ip_cityCode=2817; ipLoc-djd=2-2817-51973-0; 3AB9D23F7A4B3C9B=ZOEVZOLRXLAUYWGYULQOKKHNLEAI7UOZRJHAVT7FQIUXREAPSHYQPPA2QJBCKBUQDQDK4RGCEXEDSUW4HLIL62DJNU; __jdb=122270672.5.1662379846916272156429|13.1668993673; shshshsID=f26bc4f06c6de120ede89d866cb8c380_5_1668993721789"
 #cookie需要timely更新，否则影响抓取comment等等功能（退出再登陆，页面刷新，找一个海外购商品页面，控制台-网络-第一行当前页面-请求标头-cookie，删除thor这一项）
 COOKIE_EX = "shshshfpa=862a6605-db4a-6154-47e5-af19cfa7c8bf-1664271435; __jdv=181809404|search.jd.com|-|referral|-|1664271435321; shshshfpb=whRyyEaaTJJ9UrwxkKsPvPg; areaId=2; ipLoc-djd=2-2817-51973-0; shshshfp=4fb4889ad884f65329321193d8b66aa0; __jdc=181809404; 3AB9D23F7A4B3C9B=IABYFHSAZ5YE4JK67BOOHWXZM3E3Q6LHRDFAOMFFBNIQYMWUZOXRA33UAIVOJD5FAGMHAXRKCCL2HARJ4LAJGRSQHE; shshshsID=feb97181256df9fca61850206dfd023e_1_1665448565902; __jda=181809404.1664271435320884582036.1664271435.1665420953.1665448566.6; __jdb=181809404.1.1664271435320884582036|6.1665448566"
 
@@ -44,6 +44,7 @@ FILE_CONFIG_MASTER = "configMaster.csv"
 FILE_CONFIG_DETAIL = "configDetail.csv"
 FILE_CONFIG_FILTER = "configFilter.csv"
 FILE_CONFIG_COMMENT = "configComment.csv"
+FILE_CONFIG_EXTRACT = "configExtract.csv"
 SPECIAL_SPLIT = "█"
 SPECIAL_ID_HEAD = "_"
 
@@ -1044,6 +1045,113 @@ def generateTable(fData, keyword, url, count):
             print(str(sku))
         print("-" * 20)
 
+def extractTable(fInput, fOutput, extractList): 
+    #读取input文件，提取首行内容，然后逐行处理
+    if os.path.exists(fInput):
+        #删除旧的output文件（离线功能，不需要备份）
+        if os.path.exists(fOutput):
+            os.remove(fOutput)
+        #读取input文件内容
+        rowListInput = parseCsv(fInput)
+        rowConfigInput = rowListInput[0]  #第一行，老的配置
+        rowConfigOutput = rowConfigInput
+        rowConfigOutput.append(SPECIAL_SPLIT) #加上分隔符
+        rowConfigOutput.extend(extractList) #加上本次需要清洗的内容作为表头
+        #print(rowConfigOutput)
+        appendCsv(fOutput, rowConfigOutput)
+        #开始处理每一行数据
+        for rowInput in rowListInput[1:]:
+            rowOutput = rowInput
+            rowOutput.append(SPECIAL_SPLIT) #加上分隔符
+            for extract in extractList: 
+                dataExtracted = None
+                # ++++ 添加新的清洗参数以及对应函数，在这里“注册” ++++ --------------------------------------------
+                if extract == "Weight": 
+                    dataExtracted = _exWeight(rowConfigInput, rowInput)
+                if extract == "Length": 
+                    dataExtracted = _exLength(rowConfigInput, rowInput)
+                if extract == "Width": 
+                    dataExtracted = _exWidth(rowConfigInput, rowInput)    
+                if extract == "Height": 
+                    dataExtracted = _exHeight(rowConfigInput, rowInput)    
+                if extract == "PanelSize": 
+                    dataExtracted = _exPanelSize(rowConfigInput, rowInput)
+                if extract == "ResX": 
+                    dataExtracted = _exResX(rowConfigInput, rowInput)
+                if extract == "ResY": 
+                    dataExtracted = _exResY(rowConfigInput, rowInput) 
+                if extract == "PPI": 
+                    dataExtracted = _exPPI(rowConfigInput, rowInput)    
+                # ---- 添加新的清洗参数以及对应函数，在这里“注册” ---- --------------------------------------------
+                if dataExtracted == None: 
+                    rowOutput.append("")
+                else:
+                    rowOutput.append(str(dataExtracted))
+            #print(rowOutput)
+            appendCsv(fOutput, rowOutput)
+            
+
+# ======== Extract Sub-functions ========
+#从已有表格清洗数据生成新的表格，每一个清洗项单独定义子函数，根据需要来调用并将结果写入生成表格
+def _exWeight(rowConfigInput, rowInput):
+    dataOrigin = rowInput[rowConfigInput.index("产品净重（kg）")]
+    dataSearch = re.search("\d+\.?\d*", dataOrigin) #抽取整数或小数
+    dataExtracted = dataSearch.group() if dataSearch != None else None
+    return dataExtracted
+
+def _exLength(rowConfigInput, rowInput):
+    dataOrigin = rowInput[rowConfigInput.index("产品尺寸")]
+    dataFilter = re.search("长(.*?)mm", dataOrigin) #匹配关键字段
+    dataSearch = re.search("\d+\.?\d*", dataFilter.group()) if dataFilter != None else None #抽取整数或小数
+    dataExtracted = dataSearch.group() if dataSearch != None else None
+    return dataExtracted
+
+def _exWidth(rowConfigInput, rowInput):
+    dataOrigin = rowInput[rowConfigInput.index("产品尺寸")]
+    dataFilter = re.search("宽(.*?)mm", dataOrigin) #匹配关键字段
+    dataSearch = re.search("\d+\.?\d*", dataFilter.group()) if dataFilter != None else None #抽取整数或小数
+    dataExtracted = dataSearch.group() if dataSearch != None else None
+    return dataExtracted
+
+def _exHeight(rowConfigInput, rowInput):
+    dataOrigin = rowInput[rowConfigInput.index("产品尺寸")]
+    dataFilter = re.search("高(.*?)mm", dataOrigin) #匹配关键字段
+    dataSearch = re.search("\d+\.?\d*", dataFilter.group()) if dataFilter != None else None #抽取整数或小数
+    dataExtracted = dataSearch.group() if dataSearch != None else None
+    return dataExtracted
+
+def _exPanelSize(rowConfigInput, rowInput):
+    dataOrigin = rowInput[rowConfigInput.index("屏幕尺寸")]
+    dataSearch = re.search("\d+\.?\d*", dataOrigin)
+    dataExtracted = dataSearch.group() if dataSearch != None else None #抽取整数或小数
+    return dataExtracted
+
+def _exResX(rowConfigInput, rowInput):
+    dataOrigin = rowInput[rowConfigInput.index("屏幕分辨率")]
+    dataFilter = dataOrigin.split('*') #匹配关键字段
+    dataSearch = re.search("\d+\.?\d*", dataFilter[0]) if len(dataFilter) > 1 else None #抽取整数或小数
+    dataExtracted = dataSearch.group() if dataSearch != None else None
+    return dataExtracted
+    
+def _exResY(rowConfigInput, rowInput):
+    dataOrigin = rowInput[rowConfigInput.index("屏幕分辨率")]
+    dataFilter = dataOrigin.split('*') #匹配关键字段
+    dataSearch = re.search("\d+\.?\d*", dataFilter[-1]) if len(dataFilter) > 1 else None #抽取整数或小数
+    dataExtracted = dataSearch.group() if dataSearch != None else None
+    return dataExtracted  
+
+def _exPPI(rowConfigInput, rowInput):
+    dataPanelSize = _exPanelSize(rowConfigInput, rowInput)      
+    dataPanelSize = float(dataPanelSize) if dataPanelSize != None else None #提取屏幕尺寸
+    dataResX = _exResX(rowConfigInput, rowInput)                
+    dataResX = float(dataResX) if dataResX != None else None #提取分辨率X
+    dataResY = _exResY(rowConfigInput, rowInput)                
+    dataResY = float(dataResY) if dataResY != None else None #提取分辨率Y
+    if dataPanelSize != None and dataPanelSize != 0 and dataResX != None and dataResY != None:
+        dataExtracted = int(pow((pow(dataResX, 2) + pow(dataResY, 2)), 0.5) / dataPanelSize) #计算PPI = sqrt(ResX^ + ResY^) / PanelSize
+    else: 
+        dataExtracted = None
+    return dataExtracted
 
 # ======== MAIN ========
 #定义参数列表
@@ -1053,6 +1161,10 @@ def getArgs():
     parser.add_argument("--filter", type=int, default=-1)
     parser.add_argument("--count", type=int, default=100)
     parser.add_argument("--setup", type=int, default=0)
+    parser.add_argument("--extract", type=int, default=0)
+    parser.add_argument("--profile", type=int, default=0)
+    parser.add_argument("--inputfile", type=str, default="")
+    parser.add_argument("--outputfile", type=str, default="")
     parser.add_argument("--comment", type=int, default=0)
     parser.add_argument("--text", type=int, default=0)
     parser.add_argument("--sku", type=int, default=0)
@@ -1068,6 +1180,10 @@ if __name__ == "__main__":
     FILTER = args.filter
     COUNT = args.count
     SETUP = args.setup
+    EXTRACT = args.extract
+    PROFILE = args.profile
+    INPUTFILE = args.inputfile
+    OUTPUTFILE = args.outputfile
     COMMENT = args.comment
     TEXT = args.text
     SKU = args.sku
@@ -1102,6 +1218,22 @@ if __name__ == "__main__":
                 addFootprint(path, path+'  '+level, str(skuList[0]), len(skuList), len(commentPool[level]), len(commentPool['good'])+len(commentPool['middle'])+len(commentPool['bad']))               
         else:
             print("Please input a valid index or sku for comment capture!")
+    elif EXTRACT == 1:
+        if os.path.exists(INPUTFILE):
+            print("Extract data from input file: ", INPUTFILE)
+            profileExtractList = parseCsv(FILE_CONFIG_EXTRACT)
+            if PROFILE < len(profileExtractList):
+                extractList = profileExtractList[PROFILE]
+                print("Extract data for: ", end='')
+                for extract in extractList:
+                    print(extract+', ', end='')
+                print()
+                extractTable(INPUTFILE, OUTPUTFILE, extractList)
+                print("Extract data to output file: ", OUTPUTFILE)
+            else: 
+                print("Please input a valid profile!")
+        else: 
+            print("Please input a correct path for input file!")
     else:
         #转换序号为关键字
         #searchList = ["游戏本", "轻薄本", "设计本", "显卡", "EVO笔记本"]#定义关键字列表，注意该关键字会在config文件中对应相关配置
