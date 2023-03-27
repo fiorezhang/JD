@@ -51,34 +51,40 @@ SPECIAL_ID_HEAD = "_"
 #表头
 # "年", "月", "日", "星期", "时间", "ID", "LINK", "销量指数", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌", SPECIAL_SPLIT, =INDEX=, SPECIAL_SPLIT, =DETAIL=, SPECIAL_SPLIT, "好评率", "中评率", "差评率", "好评数", "中评数", "差评数"
 
-HELP  = "-------------------------------------------------------------------------------\n"
-HELP += "==  JD Script to capture data from end-user interface                        ==\n"
-HELP += "==                                                                           ==\n"
-HELP += "==  Usage:                                                                   ==\n"
-HELP += "==         --search x: Search for segment[x] from configMaster.csv           ==\n"
-HELP += "==           --count x: Plan to capture x+ skus for current segment          ==\n"
-HELP += "==           --setup 1/0: Turn on/off generate parameter for current segment ==\n" 
-HELP += "==           --filter: Input URL with filters for current segment            ==\n"
-HELP += "==         --comment 1/0: Turn on/off capture comments function              ==\n"
-HELP += "==           --text 1/0: Turn on/off comments list and excel function        ==\n"
-HELP += "==           --sku x: Capture comments for sku x                             ==\n"
-HELP += "==           --index x: Capture comments for index x in configComment.csv    ==\n"
-HELP += "==                                                                           ==\n"
-HELP += "==  Examples:                                                                ==\n"
-HELP += "==         python jd.py --search 2 --count 100                               ==\n"
-HELP += "==           Capture data for 100+ top volume skus for segment[2]            ==\n"
-HELP += "==         python jd.py --search 2 --filter 1 --count 100                    ==\n"
-HELP += "==           Capture data for 100+ top volume skus for segment[2] filter[1]  ==\n"
-HELP += "==         python jd.py --search 3 --setup 1                                 ==\n"
-HELP += "==           Generate parameters in configDetail.csv for segment[3]          ==\n"
-HELP += "==         python jd.py --comment 1 --sku 10000 --text 1                     ==\n"
-HELP += "==           Capture comments for sku 10000, and generate text and csv       ==\n"
-HELP += "==         python jd.py --comment 1 --index all                              ==\n"
-HELP += "==           Capture comments for all categories in config file              ==\n"
-HELP += "==         python jd.py --comment 1 --index 2                                ==\n"
-HELP += "==           Capture comments for category 2 in config file                  ==\n"
-HELP += "==                                                                           ==\n"
-HELP += "-------------------------------------------------------------------------------\n"
+HELP  = "---------------------------------------------------------------------------------------------\n"
+HELP += "==  JD Script to capture data from end-user interface                                      ==\n"
+HELP += "==                                                                                         ==\n"
+HELP += "==  Usage:                                                                                 ==\n"
+HELP += "==         --search x: Search for segment[x] from configMaster.csv                         ==\n"
+HELP += "==           --count x: Plan to capture x+ skus for current segment                        ==\n"
+HELP += "==           --setup 1/0: Turn on/off generate parameter for current segment               ==\n" 
+HELP += "==           --filter: Input URL with filters for current segment                          ==\n"
+HELP += "==         --extract 1/0: Turn on/off extract function                                     ==\n"
+HELP += "==           --profile x: Load extract parameters from configExtract.csv                   ==\n"
+HELP += "==           --inputfile: Provide input csv file with original data                        ==\n" 
+HELP += "==           --outputfile: Provide output csv file path for extracted data                 ==\n"
+HELP += "==         --comment 1/0: Turn on/off capture comments function                            ==\n"
+HELP += "==           --text 1/0: Turn on/off comments list and excel function                      ==\n"
+HELP += "==           --sku x: Capture comments for sku x                                           ==\n"
+HELP += "==           --index x: Capture comments for index x in configComment.csv                  ==\n"
+HELP += "==                                                                                         ==\n"
+HELP += "==  Examples:                                                                              ==\n"
+HELP += "==         python jd.py --search 2 --count 100                                             ==\n"
+HELP += "==           Capture data for 100+ top volume skus for segment[2]                          ==\n"
+HELP += "==         python jd.py --search 2 --filter 1 --count 100                                  ==\n"
+HELP += "==           Capture data for 100+ top volume skus for segment[2] filter[1]                ==\n"
+HELP += "==         python jd.py --search 3 --setup 1                                               ==\n"
+HELP += "==           Generate parameters in configDetail.csv for segment[3]                        ==\n"
+HELP += "==         python jd.py --extract 1 --profile 0 --inputfile 'a.csv' --outputfile 'b.csv'   ==\n"
+HELP += "==           According to profile 0, extract data from a.csv to b.csv                      ==\n"
+HELP += "==         python jd.py --comment 1 --sku 10000 --text 1                                   ==\n"
+HELP += "==           Capture comments for sku 10000, and generate text and csv                     ==\n"
+HELP += "==         python jd.py --comment 1 --index all                                            ==\n"
+HELP += "==           Capture comments for all categories in config file                            ==\n"
+HELP += "==         python jd.py --comment 1 --index 2                                              ==\n"
+HELP += "==           Capture comments for category 2 in config file                                ==\n"
+HELP += "==                                                                                         ==\n"
+HELP += "---------------------------------------------------------------------------------------------\n"
 
 
 # ======== MISC ========
@@ -373,7 +379,7 @@ def getCommentRate(sku):
     tags = []
     retry = RETRY
     while retry > 0:
-        #一般场景，国内商品
+        #一般场景，国内商品，可能使用了不同的编码格式，分别尝试
         try:        
             request = urllib.request.Request(url, headers=head)
             response = urllib.request.urlopen(request)
@@ -387,6 +393,19 @@ def getCommentRate(sku):
                 break
         except Exception as ex:
             pass  
+        try:        
+            request = urllib.request.Request(url, headers=head)
+            response = urllib.request.urlopen(request)
+            content = response.read().decode('gb2312')
+            #print(content)
+
+            result = json.loads(content)
+            summary = result['productCommentSummary']
+            #tags = result['hotCommentTagStatistics']
+            if summary != "" and summary != None:
+                break
+        except Exception as ex:
+            pass                        
         #特殊场景，海外购，url和cookie都不一样    
         try:    
             request = urllib.request.Request(url, headers=head_ex)
