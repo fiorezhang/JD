@@ -3,7 +3,7 @@
 # ================================================================  #
 #                                                                   #
 #                    INTERNAL STUDY ONLY !                          #
-#                        VERSION 7.2                                #
+#                        VERSION 7.4                                #
 #                                                                   #
 # ================================================================  #
 
@@ -280,10 +280,9 @@ def getPrice_Legacy(sku):
         time.sleep(2)
     #print(price)
     return price
-'''
     
 #新的接口，通过fts.jd.com查询价格信息
-def getPrice(sku):
+def getPrice_Legacy_2(sku):
     head = {'User-Agent': USERAGENT, 
             'Cookie': COOKIE, 
             'Referer': 'https://item.jd.com'}  
@@ -314,7 +313,40 @@ def getPrice(sku):
         time.sleep(2)
     #print(price)
     return price_m, price_op, price_p    
-
+'''
+    
+#新的接口，通过pctradesoa_getprice查询价格信息
+def getPrice(sku):
+    head = {'User-Agent': USERAGENT, 
+            'Cookie': COOKIE, 
+            'Referer': 'https://item.jd.com'}  
+    url = 'https://api.m.jd.com/?appid=item-v3&functionId=pctradesoa_getprice&client=pc&clientVersion=1.0.0&body={"skuIds":"' + str(sku) + '","source":"pc-item"}'
+    
+    #print(url)
+    price_m = None
+    price_op = None
+    price_p = None
+    retry = RETRY
+    while retry > 0:
+        try:
+            request = urllib.request.Request(url, headers=head)
+            response = urllib.request.urlopen(request, timeout=TIMEOUT)
+            content = response.read().decode()
+            pattern = re.compile('"m":"(.*?)"')
+            price_m = re.search(pattern, content).group(1)
+            pattern = re.compile('"op":"(.*?)"')
+            price_op = re.search(pattern, content).group(1) 
+            pattern = re.compile('"p":"(.*?)"')
+            price_p = re.search(pattern, content).group(1)            
+        except:
+            pass
+        else:
+            break
+        retry -= 1
+        ##print("    == Retry getPrice(), can fix occational network lag")
+        time.sleep(2)
+    #print(price)
+    return price_m, price_op, price_p    
 
 # ======== CAPTURE COMMENTS ========       
 '''
@@ -1234,7 +1266,7 @@ if __name__ == "__main__":
             #for level in ['good', 'middle', 'bad']:
             for level in ['good', 'bad']:
                 path = saveComment(SKU, level, commentPool, "", TEXT) 
-                addFootprint(path, path+'  '+level, str(skuList[0]), len(skuList), len(commentPool[level]), len(commentPool['good'])+len(commentPool['middle'])+len(commentPool['bad']))               
+                addFootprint(path, path+'  '+level, str(SKU), len(str(SKU)), len(commentPool[level]), len(commentPool['good'])+len(commentPool['middle'])+len(commentPool['bad']))               
         else:
             print("Please input a valid index or sku for comment capture!")
     elif EXTRACT == 1:
