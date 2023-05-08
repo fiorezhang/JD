@@ -49,7 +49,7 @@ SPECIAL_SPLIT = "█"
 SPECIAL_ID_HEAD = "_"
 
 #表头
-# "年", "月", "日", "星期", "时间", "ID", "LINK", "销量指数", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌", SPECIAL_SPLIT, =INDEX=, SPECIAL_SPLIT, =DETAIL=, SPECIAL_SPLIT, "好评率", "中评率", "差评率", "好评数", "中评数", "差评数"
+# "年", "月", "日", "星期", "时间", "ID", "LINK", "京东页数", "销量排名", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌", SPECIAL_SPLIT, =INDEX=, SPECIAL_SPLIT, =DETAIL=, SPECIAL_SPLIT, "好评率", "中评率", "差评率", "好评数", "中评数", "差评数"
 
 HELP  = "---------------------------------------------------------------------------------------------\n"
 HELP += "==  JD Script to capture data from end-user interface                                      ==\n"
@@ -111,13 +111,19 @@ def normalizeCountStr(countStr):
         count = int(10000 * float(countStr_2))
     return count
 
-def getHalfPage(sku, skupagelist):
+def getRankPage(sku, skupagelist):
     page = ""
     for skupagenum, skupage in enumerate(skupagelist):
         if sku in skupage:
             break
     page = str(skupagenum + 1)
     return page
+
+def getRankSku(sku, skulist):
+    if sku in skulist:
+        return skulist.index(sku) + 1
+    else:
+        return 0
 
 #写入CSV文件
 def appendCsv(file, row):
@@ -613,7 +619,7 @@ def colorFunc(word=None, font_size=None, position=None, orientation=None, font_p
 
 
 #生成词云
-def saveComment(sku, level, commentPool, path, text): 
+def saveComment(sku, level, commentPool, path, text):
     MAXWORD = 50
     commentList = commentPool[level]
     if path is None or path == "":
@@ -935,7 +941,7 @@ def loadTable(fData, keyword):
                 skuDetail = []
                 #第一组普通信息
                 rowConfigPart = rowConfig[: listSpecialSplit[0]]    
-                for index in ["年", "月", "日", "星期", "时间", "ID", "LINK", "销量指数", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌"]: 
+                for index in ["年", "月", "日", "星期", "时间", "ID", "LINK", "京东页数", "销量排名", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌"]:
                     if index in rowConfigPart:    
                         skuDetail.append(row[rowConfigPart.index(index)])
                     else:
@@ -983,7 +989,7 @@ def generateTable(fData, keyword, url, count):
         os.remove(TEMPFILE_DATA)
 
     #生成临时数据文件的表头
-    row = ["年", "月", "日", "星期", "时间", "ID", "LINK", "销量指数", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌", SPECIAL_SPLIT]
+    row = ["年", "月", "日", "星期", "时间", "ID", "LINK", "京东页数", "销量排名", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌", SPECIAL_SPLIT]
     for index in listIndex:
         row.append(index)
     row.append(SPECIAL_SPLIT)   
@@ -1016,6 +1022,7 @@ def generateTable(fData, keyword, url, count):
     if len(listSkuOld) < count or len(listAdditional) > 0:
         #抓取所有sku的货号
         listsku, skupagelist = getList(keyword, url, count)
+        listskuOriginal = listsku
         print("Available records: ", len(listsku))
         #print(listsku)
         #加入手动添加的sku货号
@@ -1034,7 +1041,8 @@ def generateTable(fData, keyword, url, count):
             progress = cSku/len(listskuThis)
             print("\rProgress: %.1f%%  " % float(100*progress) + "[" + "="*int(20*progress) + "-"*(20-int(20*progress)) + "]  " + "Working on Sku " + str(sku) + " "*10, end='')
             price_m, price_op, price_p = getPrice(sku)
-            halfpage = getHalfPage(sku, skupagelist)
+            rankPage = getRankPage(sku, skupagelist)
+            rankSku = getRankSku(sku, listskuOriginal)
             skuname, shop, goodshop, brand, listinfo, listtableindex, listtabledata = getInfo(sku)
             summary = getCommentRate(sku)
             #tags = getCommentTags(sku)
@@ -1055,7 +1063,7 @@ def generateTable(fData, keyword, url, count):
             
             #信息准备好后开始一次性写入一行
             row = [time.strftime("%Y", time.localtime()), time.strftime("%m", time.localtime()), time.strftime("%d", time.localtime()), time.strftime("%A", time.localtime()), time.strftime("%H:%M", time.localtime()), SPECIAL_ID_HEAD+str(sku), 'https://item.jd.com/'+str(sku)+'.html']
-            row.extend([halfpage, skuname, price_m, price_op, price_p, shop, goodshop, brand, SPECIAL_SPLIT])
+            row.extend([rankPage, rankSku, skuname, price_m, price_op, price_p, shop, goodshop, brand, SPECIAL_SPLIT])
             listinfoindex = [x.split("：")[0] for x in listinfo if '：' in x]
             listinfodata = [x.split("：")[1] for x in listinfo if '：' in x]
             for index in listIndex:
