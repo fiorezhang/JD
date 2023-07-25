@@ -3,7 +3,7 @@
 # ================================================================  #
 #                                                                   #
 #                    INTERNAL STUDY ONLY !                          #
-#                        VERSION 7.4                                #
+#                        VERSION 7.7                                #
 #                                                                   #
 # ================================================================  #
 
@@ -29,11 +29,12 @@ from PIL import ImageFont, ImageDraw, Image
 
 # ======== COOKIE FOR WEB REQUEST ========
 #cookie需要timely更新，否则影响抓取comment等等功能（退出再登陆，页面刷新，控制台-网络-搜索'club'-请求标头-cookie，删除thor这一项）
-COOKIE = "__jdu=1662379846916272156429; shshshfpa=d99c5362-8a4b-a678-0024-58552f251967-1665473602; shshshfpb=iBuenWAhnUwZUs_Jf4CzWUA; TrackID=1YK2pXdZgAd6aZmz8KNcMcxp70DtjlW1eirjhGicSFs7oI2jGQqvkae32IZxw6MGR444uv27SvxAHPQtcsLo8KB_gbqDOnplZlqN1sgo1i2lb6wZ1pHYxgZ1n5oiOmsjb; pinId=lSwRbMKd-74tBDbKmwsL1w; pin=FioreZhang; unick=FioreZhang; _tp=IcTvqSKCNvN8JKtp2uhsOg==; _pst=FioreZhang; __jdv=76161171|direct|-|none|-|1668993673036; PCSYCityID=CN_310000_310100_0; jsavif=0; __jda=122270672.1662379846916272156429.1662379847.1667356629.1668993673.13; __jdc=122270672; shshshfp=80d8ef1a0606c264960f09f5e2bc236b; areaId=2; token=ae4c9f56f95861a472004865e50c72de,2,927218; __tk=jifolUeFJUuqkvn1Isq1JvkikUtEkpeyIDJilcaxJpG0jzIFjUnzJn,2,927218; ip_cityCode=2817; ipLoc-djd=2-2817-51973-0; 3AB9D23F7A4B3C9B=ZOEVZOLRXLAUYWGYULQOKKHNLEAI7UOZRJHAVT7FQIUXREAPSHYQPPA2QJBCKBUQDQDK4RGCEXEDSUW4HLIL62DJNU; __jdb=122270672.5.1662379846916272156429|13.1668993673; shshshsID=f26bc4f06c6de120ede89d866cb8c380_5_1668993721789"
+COOKIE = "3AB9D23F7A4B3CSS=jdd03A5AUPVN5NGXKWUHUFCGXFFTBQLUPINWXLUSXRJHEJWDZ772GGX4KZHOHU5SOX3J22O2VTKLJCP557EOQCAQICW3VCEAAAAMJNQBQUUIAAAAADS43QKFRTNG47UX; __jda=122270672.16817229931532049908455.1681722993.1689668824.1689734286.5; __jdu=16817229931532049908455; shshshfp=215c667202652009948430d6bb99d2f7; shshshfpa=f0a8dd83-34e8-be08-bbe1-050d3a1ceafb-1681722994; shshshfpx=f0a8dd83-34e8-be08-bbe1-050d3a1ceafb-1681722994; shshshfpb=hEe1icP8J3s_NwxCkN0Z5PQ; ipLoc-djd=2-2825-0-0; xapieid=jdd03A5AUPVN5NGXKWUHUFCGXFFTBQLU…811B468A9F3048A22A6C0FAAA6F995A084346716747D73BBD97BD6A583AF621A44C710D47B74A0CF2C6CBBFE36BF07843D4AE95A53062592D0247B115FD685A4A3F539AE44F829B91C7F4157D9A2FCB05D00086E1CF6B745EA498892DD19F53CB4AB42E13AB527ACFDF6D144D241CBD89EB064A1966E92B94EBF953072; flash=2_X7ZyeRvdLEeLxdqx6RuW5swavlxSP2ezK2sCWbt44V0Mbhewk-EfasjVpdMOiUhdns-ezlvFxPXgX2z-m5PYelU2olhuU7nbASSwnonx01e*; pinId=lSwRbMKd-74tBDbKmwsL1w; pin=FioreZhang; unick=FioreZhang; ceshi3.com=203; _tp=IcTvqSKCNvN8JKtp2uhsOg%3D%3D; logining=1; _pst=FioreZhang"
+COOKIE = COOKIE.encode('utf-8')
 #cookie需要timely更新，否则影响抓取comment等等功能（退出再登陆，页面刷新，找一个海外购商品页面，控制台-网络-第一行当前页面-请求标头-cookie，删除thor这一项）
 COOKIE_EX = "shshshfpa=862a6605-db4a-6154-47e5-af19cfa7c8bf-1664271435; __jdv=181809404|search.jd.com|-|referral|-|1664271435321; shshshfpb=whRyyEaaTJJ9UrwxkKsPvPg; areaId=2; ipLoc-djd=2-2817-51973-0; shshshfp=4fb4889ad884f65329321193d8b66aa0; __jdc=181809404; 3AB9D23F7A4B3C9B=IABYFHSAZ5YE4JK67BOOHWXZM3E3Q6LHRDFAOMFFBNIQYMWUZOXRA33UAIVOJD5FAGMHAXRKCCL2HARJ4LAJGRSQHE; shshshsID=feb97181256df9fca61850206dfd023e_1_1665448565902; __jda=181809404.1664271435320884582036.1664271435.1665420953.1665448566.6; __jdb=181809404.1.1664271435320884582036|6.1665448566"
 
-USERAGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0"
+USERAGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0"
 
 # ======== MACROS ========
 MAXPAGE = 100
@@ -47,9 +48,10 @@ FILE_CONFIG_COMMENT = "configComment.csv"
 FILE_CONFIG_EXTRACT = "configExtract.csv"
 SPECIAL_SPLIT = "█"
 SPECIAL_ID_HEAD = "_"
+LOCAL_BUFFER = []
 
 #表头
-# "年", "月", "日", "星期", "时间", "ID", "LINK", "京东页数", "销量排名", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌", SPECIAL_SPLIT, =INDEX=, SPECIAL_SPLIT, =DETAIL=, SPECIAL_SPLIT, "好评率", "中评率", "差评率", "好评数", "中评数", "差评数"
+# "年", "月", "日", "星期", "时间", "ID", "LINK", "销量指数", "商品全名", "价格", "店铺", "京东自营", "品牌", SPECIAL_SPLIT, =INDEX=, SPECIAL_SPLIT, =DETAIL=, SPECIAL_SPLIT, "好评率", "中评率", "差评率", "好评数", "中评数", "差评数"
 
 HELP  = "---------------------------------------------------------------------------------------------\n"
 HELP += "==  JD Script to capture data from end-user interface                                      ==\n"
@@ -67,15 +69,16 @@ HELP += "==         --comment 1/0: Turn on/off capture comments function        
 HELP += "==           --text 1/0: Turn on/off comments list and excel function                      ==\n"
 HELP += "==           --sku x: Capture comments for sku x                                           ==\n"
 HELP += "==           --index x: Capture comments for index x in configComment.csv                  ==\n"
+HELP += "==         --local x: Read sku list info and price from local x file(csv format)           ==\n"
 HELP += "==                                                                                         ==\n"
 HELP += "==  Examples:                                                                              ==\n"
-HELP += "==         python jd.py --search 2 --count 100                                             ==\n"
-HELP += "==           Capture data for 100+ top volume skus for segment[2]                          ==\n"
+HELP += "==         python jd.py --search 2 --count 100 --local jd_july.csv                         ==\n"
+HELP += "==           Capture data for 100+ top volume skus for segment[2], list from jd_july.csv   ==\n"
 HELP += "==         python jd.py --search 2 --filter 1 --count 100                                  ==\n"
 HELP += "==           Capture data for 100+ top volume skus for segment[2] filter[1]                ==\n"
 HELP += "==         python jd.py --search 3 --setup 1                                               ==\n"
 HELP += "==           Generate parameters in configDetail.csv for segment[3]                        ==\n"
-HELP += "==         python jd.py --extract 1 --profile 0 --inputfile 'a.csv' --outputfile 'b.csv'   ==\n"
+HELP += "==         python jd.py --extract 1 --profile 0 --inputfile a.csv --outputfile b.csv       ==\n"
 HELP += "==           According to profile 0, extract data from a.csv to b.csv                      ==\n"
 HELP += "==         python jd.py --comment 1 --sku 10000 --text 1                                   ==\n"
 HELP += "==           Capture comments for sku 10000, and generate text and csv                     ==\n"
@@ -170,6 +173,30 @@ def mkdir(path):
 
 
 # ======== CAPTURE LIST OF SKU ========
+# JD无法通过首页获取sku list，改成从本地文档读取
+'''
+	Unnamed: 0	ID	price	name	type
+0	1	1.00059E+11	￥4999.00	ROG掌机 掌上游戏机 windows11便携游戏本 AMD 锐龙 Z1E RDNA3显卡 7英寸 120Hz高色域高亮屏 16G+512GB	掌机
+1	1	1.0003E+11	￥3529.00	索尼（SONY）PS5 PlayStation®5 光驱版 国行PS5游戏机	掌机
+2	1	1.00057E+11	￥4759.00	索尼（SONY）PS5 PlayStation®5 光驱版 国行PS5游戏机双手柄套装	掌机
+'''
+def parseLocalInput(file):
+    listIndex = ["type", "ID", "price"]
+    rows = parseCsv(file)
+    rowIndex = rows[0]
+    try:
+        indexType = rowIndex.index("type")
+        indexId = rowIndex.index("ID")
+        indexPrice = rowIndex.index("price")
+    except:
+        print("== Error == Load local sku list file failed. ")
+        return
+    
+    for row in rows:
+        LOCAL_BUFFER.append([row[indexType], row[indexId], row[indexPrice].replace("￥","")])
+        
+    #print(LOCAL_BUFFER[:100])
+
 #JD页面每一页默认刷新30个物品，下拉后再刷新30个。所以需要对于每一页分上下部分分别处理。
 #抓取上半页的物品sku number
 def getListPageUp(keyword, url, page):
@@ -236,6 +263,7 @@ def getListPageDown(keyword, url, page):
 def getList(keyword, url, countnum):
     skulist = []
     skupagelist = []
+    
     for page in range(1, MAXPAGE):
         print("Getting sku list for Page "+str(page))
         #获得每页上半页，如果没有新的sku就跳出循环
@@ -257,6 +285,31 @@ def getList(keyword, url, countnum):
         if len(skulist) >= countnum:
             break
         time.sleep(3)   #慢一点……
+    
+    return skulist, skupagelist
+        
+def getListLocal(keyword, url, countnum):
+    skulist = []
+    skupagelist = []
+
+    count = 0
+    templist = []
+    for item in LOCAL_BUFFER:
+        if item[0] == keyword:  # 匹配关键字，例如“游戏本”
+            #print("getListLocal - item: ", item)
+            skulist.append(item[1])  # 添加当前sku ID
+            templist.append(item[1]) # 同时缓存到临时列表
+            count += 1
+        if count == 30: # 满30个就存到skupagelist里面
+            skupagelist.append(templist)
+            count = 0
+            templist = []
+        if len(skulist) >= countnum: # 如果超过希望抓取的sku数量就跳出循环
+            skupagelist.append(templist)
+            break
+
+    #print("skulist: ", skulist)
+    #print("skupagelist: ", skupagelist)
     
     return skulist, skupagelist
 
@@ -353,6 +406,16 @@ def getPrice(sku):
         time.sleep(2)
     #print(price)
     return price_m, price_op, price_p    
+
+def getPriceLocal(sku):
+    try:
+        for item in LOCAL_BUFFER:
+            if item[1] == sku:  # 匹配sku
+                #print("sku: ", sku)
+                #print("item: ", item)
+                return 0, 0, item[2] # 返回价格，第三个是实际价格
+    except:
+        return 0, 0, 0
 
 # ======== CAPTURE COMMENTS ========       
 '''
@@ -619,7 +682,7 @@ def colorFunc(word=None, font_size=None, position=None, orientation=None, font_p
 
 
 #生成词云
-def saveComment(sku, level, commentPool, path, text):
+def saveComment(sku, level, commentPool, path, text): 
     MAXWORD = 50
     commentList = commentPool[level]
     if path is None or path == "":
@@ -630,7 +693,7 @@ def saveComment(sku, level, commentPool, path, text):
         #保存所有评论文本
         if text == 1:
             stringbreak = '\r\n'+'-'*20+'\r\n'
-            with open(path+os.sep+path+'_'+level+'.txt', 'w') as f:
+            with open(path+os.sep+path+'_'+level+'.txt', 'w', encoding='utf-8-sig') as f:
                 for comment in commentList:
                     f.write(comment)
                     f.write(stringbreak)
@@ -673,7 +736,7 @@ def saveComment(sku, level, commentPool, path, text):
     return path
 
 #在图片上加字符串
-def addStringToImg(image, string, x, y, fontsize=25):
+def addStringToImg(image, string, x, y, fontsize=20):
     tempImg = '_temp.png'
     os.rename(image, tempImg)
     bk_img = cv2.imread(tempImg)
@@ -702,7 +765,7 @@ def addFootprint(path, title, sku0, skuNum, commentNumLevel, commentNumAll):
         if int(skuNum) > 1:
             addStringToImg(fImage, str(sku0.strip(SPECIAL_ID_HEAD)) + ' and ' + str(int(skuNum)-1) + ' other sample(s)', 0, 30)
         else:
-            addStringToImg(fImage, str(sku0.strip(SPECIAL_ID_HEAD)), 0, 30)
+            addStringToImg(fImage, str(sku0.strip(SPECIAL_ID_HEAD)), 0, 40)
         addStringToImg(fImage, timeStamp, 420, 455)
         print("Generated wordcloud for: "+path+"\n")
 
@@ -852,7 +915,7 @@ def getConfig(keyword):
     return listIndex, listDetail, listAdditional
 
 #根据首页商品信息，生成当前搜索词对应的config字段
-def generateConfig(keyword):
+def generateConfig(keyword, local):
     TEMPFILE_CONFIG_DETAIL = "_configDetail.csv"
     BACKFILE_CONFIG_DETAIL = "_configDetail.backup.csv"
     
@@ -875,7 +938,10 @@ def generateConfig(keyword):
                     appendCsv(TEMPFILE_CONFIG_DETAIL, [""])
 
     #抓取首页list
-    listsku, _ = getList(keyword, None, 50)
+    if local == "":
+        listsku, _ = getList(keyword, None, 50)
+    else:
+        listsku, _ = getListLocal(keyword, None, 50)
     listinfoindexpool = []
     listtableindexpool = []
     
@@ -941,7 +1007,7 @@ def loadTable(fData, keyword):
                 skuDetail = []
                 #第一组普通信息
                 rowConfigPart = rowConfig[: listSpecialSplit[0]]    
-                for index in ["年", "月", "日", "星期", "时间", "ID", "LINK", "京东页数", "销量排名", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌"]:
+                for index in ["年", "月", "日", "星期", "时间", "ID", "LINK", "京东页数", "销量排名", "商品全名", "价格", "店铺", "京东自营", "品牌"]:
                     if index in rowConfigPart:    
                         skuDetail.append(row[rowConfigPart.index(index)])
                     else:
@@ -977,7 +1043,7 @@ def loadTable(fData, keyword):
     return listSkuDetail
 
 #根据需求生成表格
-def generateTable(fData, keyword, url, count):
+def generateTable(fData, keyword, url, count, local):
     TEMPFILE_DATA = "_data_" + str(keyword) + ".csv"
     BACKFILE_DATA = "_data_" + str(keyword) + ".backup.csv"
 
@@ -989,7 +1055,7 @@ def generateTable(fData, keyword, url, count):
         os.remove(TEMPFILE_DATA)
 
     #生成临时数据文件的表头
-    row = ["年", "月", "日", "星期", "时间", "ID", "LINK", "京东页数", "销量排名", "商品全名", "虚价", "原价", "价格", "店铺", "京东自营", "品牌", SPECIAL_SPLIT]
+    row = ["年", "月", "日", "星期", "时间", "ID", "LINK", "京东页数", "销量排名", "商品全名", "价格", "店铺", "京东自营", "品牌", SPECIAL_SPLIT]
     for index in listIndex:
         row.append(index)
     row.append(SPECIAL_SPLIT)   
@@ -1021,8 +1087,11 @@ def generateTable(fData, keyword, url, count):
     #如果没有达到需要的数量，继续抓数据
     if len(listSkuOld) < count or len(listAdditional) > 0:
         #抓取所有sku的货号
-        listsku, skupagelist = getList(keyword, url, count)
-        listskuOriginal = listsku
+        if LOCAL == "":
+            listsku, skupagelist = getList(keyword, url, count)
+        else:
+            listsku, skupagelist = getListLocal(keyword, url, count)
+        listskuOriginal = listsku	
         print("Available records: ", len(listsku))
         #print(listsku)
         #加入手动添加的sku货号
@@ -1040,7 +1109,10 @@ def generateTable(fData, keyword, url, count):
         for cSku, sku in enumerate(listskuThis):
             progress = cSku/len(listskuThis)
             print("\rProgress: %.1f%%  " % float(100*progress) + "[" + "="*int(20*progress) + "-"*(20-int(20*progress)) + "]  " + "Working on Sku " + str(sku) + " "*10, end='')
-            price_m, price_op, price_p = getPrice(sku)
+            if local == "":
+                price_m, price_op, price_p = getPrice(sku)
+            else:
+                price_m, price_op, price_p = getPriceLocal(sku)
             rankPage = getRankPage(sku, skupagelist)
             rankSku = getRankSku(sku, listskuOriginal)
             skuname, shop, goodshop, brand, listinfo, listtableindex, listtabledata = getInfo(sku)
@@ -1063,7 +1135,7 @@ def generateTable(fData, keyword, url, count):
             
             #信息准备好后开始一次性写入一行
             row = [time.strftime("%Y", time.localtime()), time.strftime("%m", time.localtime()), time.strftime("%d", time.localtime()), time.strftime("%A", time.localtime()), time.strftime("%H:%M", time.localtime()), SPECIAL_ID_HEAD+str(sku), 'https://item.jd.com/'+str(sku)+'.html']
-            row.extend([rankPage, rankSku, skuname, price_m, price_op, price_p, shop, goodshop, brand, SPECIAL_SPLIT])
+            row.extend([rankPage, rankSku, skuname, price_p, shop, goodshop, brand, SPECIAL_SPLIT])
             listinfoindex = [x.split("：")[0] for x in listinfo if '：' in x]
             listinfodata = [x.split("：")[1] for x in listinfo if '：' in x]
             for index in listIndex:
@@ -1228,6 +1300,7 @@ def getArgs():
     parser.add_argument("--text", type=int, default=0)
     parser.add_argument("--sku", type=int, default=0)
     parser.add_argument("--index", type=str, default="")
+    parser.add_argument("--local", type=str, default="")
     args = parser.parse_args()
     return args
 
@@ -1247,8 +1320,12 @@ if __name__ == "__main__":
     TEXT = args.text
     SKU = args.sku
     INDEX = args.index
+    LOCAL = args.local
     
     print(HELP)
+    
+    if LOCAL != "":
+        parseLocalInput(LOCAL)
     
     if COMMENT == 1:
         if INDEX != "":
@@ -1267,14 +1344,14 @@ if __name__ == "__main__":
                 #for level in ['good', 'middle', 'bad']:
                 for level in ['good', 'bad']:
                     path = saveComment(sku, level, commentPool, cate[1], TEXT)  
-                    addFootprint(path, path+'  '+level, str(skuList[0]), len(skuList), len(commentPool[level]), len(commentPool['good'])+len(commentPool['middle'])+len(commentPool['bad']))
+                    addFootprint(path, path+'\n'+level, str(skuList[0]), len(skuList), len(commentPool[level]), len(commentPool['good'])+len(commentPool['middle'])+len(commentPool['bad']))
         elif SKU != 0:
             print("Get comments for sku: " + str(SKU))
             commentPool = getCommentDetails(SKU)
             #for level in ['good', 'middle', 'bad']:
             for level in ['good', 'bad']:
                 path = saveComment(SKU, level, commentPool, "", TEXT) 
-                addFootprint(path, path+'  '+level, str(SKU), len(str(SKU)), len(commentPool[level]), len(commentPool['good'])+len(commentPool['middle'])+len(commentPool['bad']))               
+                addFootprint(path, path+'\n'+level, str(SKU), 1, len(commentPool[level]), len(commentPool['good'])+len(commentPool['middle'])+len(commentPool['bad']))               
         else:
             print("Please input a valid index or sku for comment capture!")
     elif EXTRACT == 1:
@@ -1316,7 +1393,7 @@ if __name__ == "__main__":
             
             if SETUP == 1:
                 #对新的搜索关键字，生成config参数，后期也可以自行修改
-                generateConfig(keywordSearch)
+                generateConfig(keywordSearch, LOCAL)
             else:
                 #定义保存数据的表格文件名
                 if urlFilter == None: 
@@ -1325,7 +1402,7 @@ if __name__ == "__main__":
                     fData = "DATA_"+str(keywordSearch)+"_"+str(FILTER)+"_"+time.strftime("%Y_%m", time.localtime())+".csv"
                 
                 #生成表格
-                generateTable(fData, keywordSearch, urlFilter, COUNT)
+                generateTable(fData, keywordSearch, urlFilter, COUNT, LOCAL)
         else:
             print("Please input a valid index for search!")
 
